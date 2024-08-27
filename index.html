@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PMS Fee Calculator</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<div class="container">
+    <h2>PMS Fee Calculator</h2>
+    <div class="form-group">
+        <label for="investment">Initial Investment (in INR):</label>
+        <input type="number" id="investment" value="8000000">
+    </div>
+    <div class="form-group">
+        <label for="fixedFee">Fixed Fee (as a percentage):</label>
+        <input type="number" id="fixedFee" value="3" step="0.01">
+    </div>
+    <div class="form-group">
+        <label for="otherExpenses">Other Expenses (as a percentage):</label>
+        <input type="number" id="otherExpenses" value="0.50" step="0.01">
+    </div>
+    <div class="form-group">
+        <label for="period">Period of Investment (in Years):</label>
+        <input type="number" id="period" value="6">
+    </div>
+    <div class="form-group">
+        <label for="return1">Expected Return in Year 1 (%):</label>
+        <input type="range" id="return1" min="0" max="100" value="12" oninput="updateSliderValue('return1')">
+        <div class="range-output" id="return1-output">12%</div>
+    </div>
+    <div class="form-group">
+        <label for="return2">Expected Return in Year 2 (%):</label>
+        <input type="range" id="return2" min="0" max="100" value="16" oninput="updateSliderValue('return2')">
+        <div class="range-output" id="return2-output">16%</div>
+    </div>
+    <div class="form-group">
+        <label for="return3">Expected Return in Year 3 (%):</label>
+        <input type="range" id="return3" min="0" max="100" value="25" oninput="updateSliderValue('return3')">
+        <div class="range-output" id="return3-output">25%</div>
+    </div>
+    <div class="form-group">
+        <label for="return4">Expected Return in Year 4 (%):</label>
+        <input type="range" id="return4" min="0" max="100" value="38" oninput="updateSliderValue('return4')">
+        <div class="range-output" id="return4-output">38%</div>
+    </div>
+    <div class="form-group">
+        <label for="return5">Expected Return in Year 5 (%):</label>
+        <input type="range" id="return5" min="0" max="100" value="15" oninput="updateSliderValue('return5')">
+        <div class="range-output" id="return5-output">15%</div>
+    </div>
+    <div class="form-group">
+        <label for="return6">Expected Return in Year 6 (%):</label>
+        <input type="range" id="return6" min="0" max="100" value="10" oninput="updateSliderValue('return6')">
+        <div class="range-output" id="return6-output">10%</div>
+    </div>
+    <button onclick="calculateFees()">Calculate</button>
+    
+    <div class="result" id="result"></div>
+</div>
+
+<script src="script.js"></script>
+</body>
+</html>

@@ -1,0 +1,74 @@
+body {
+    font-family: 'Open Sans', sans-serif;
+    margin: 20px;
+    background-color: #E8FCFA;
+}
+.container {
+    background-color: #FFFFFF;
+    padding: 20px;
+    border-radius: 8px;
+    max-width: 600px;
+    margin: auto;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    color: #393341;
+}
+.form-group {
+    margin-bottom: 15px;
+}
+label {
+    display: block;
+    margin-bottom: 5px;
+    font-size: 16px;
+    color: #393341;
+}
+input[type="number"], input[type="range"] {
+    width: 100%;
+    padding: 10px;
+    box-sizing: border-box;
+    border: 1px solid #AFAFAF;
+    border-radius: 5px;
+    font-size: 14px;
+    color: #393341;
+}
+.range-output {
+    text-align: right;
+    font-size: 14px;
+    color: #393341;
+}
+button {
+    padding: 10px 20px;
+    background-color: #07877B;
+    color: #FFFFFF;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: 600;
+}
+button:hover {
+    background-color: #048C71;
+}
+.result {
+    margin-top: 20px;
+    font-weight: bold;
+    font-size: 14px;
+}
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+table, th, td {
+    border: 1px solid #AFAFAF;
+}
+th, td {
+    padding: 10px;
+    text-align: right;
+}
+th {
+    background-color: #07877B;
+    color: #FFFFFF;
+}
+@charset "utf-8";
+/* CSS Document */
+
