@@ -64,5 +64,13 @@ function calculateFees() {
         <tr>
             <td>Total</td>
             <td>INR ${totalFixedFees.toLocaleString(undefined, {minimumFractionDigits: 0, maximumFractionDigits: 0})}</td>
-            <td>INR ${totalOtherExpenses.toLocaleString
-// JavaScript Document
+            <td>INR ${totalOtherExpenses.toLocaleString(undefined, {minimumFractionDigits: 0, maximumFractionDigits: 0})}</td>
+            <td>-</td>
+            <td>INR ${totalFees.toLocaleString(undefined, {minimumFractionDigits: 0, maximumFractionDigits: 0})}</td>
+            <td>-</td>
+        </tr>
+    `;
+    resultTable += '</table>';
+
+    document.getElementById('result').innerHTML = resultTable;
+}
