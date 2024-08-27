@@ -1,10 +1,13 @@
+// Function to update the percentage value displayed next to the slider
 function updateSliderValue(sliderId) {
     const slider = document.getElementById(sliderId);
     const output = document.getElementById(sliderId + '-output');
     output.innerHTML = slider.value + '%';
 }
 
+// Function to calculate the fees and NAV based on the input values
 function calculateFees() {
+    // Retrieve input values
     const investment = parseFloat(document.getElementById('investment').value);
     const fixedFeeRate = parseFloat(document.getElementById('fixedFee').value) / 100;
     const otherExpensesRate = parseFloat(document.getElementById('otherExpenses').value) / 100;
@@ -36,8 +39,10 @@ function calculateFees() {
     `;
 
     for (let i = 0; i < period; i++) {
+        // Calculate the year-end NAV
         yearEndNav = highWatermark * (1 + returns[i]);
 
+        // Calculate the fees
         const fixedFee = highWatermark * fixedFeeRate;
         const otherExpenses = highWatermark * otherExpensesRate;
         const totalYearlyFees = fixedFee + otherExpenses;
@@ -46,8 +51,10 @@ function calculateFees() {
         totalOtherExpenses += otherExpenses;
         totalFees += totalYearlyFees;
 
+        // Update the high watermark
         highWatermark = Math.max(highWatermark, yearEndNav);
 
+        // Append the results for the current year to the table
         resultTable += `
             <tr>
                 <td>Year ${i + 1}</td>
@@ -60,6 +67,7 @@ function calculateFees() {
         `;
     }
 
+    // Append the totals row to the table
     resultTable += `
         <tr>
             <td>Total</td>
@@ -72,5 +80,14 @@ function calculateFees() {
     `;
     resultTable += '</table>';
 
+    // Display the result table in the HTML
     document.getElementById('result').innerHTML = resultTable;
 }
+
+// Event listeners for the sliders to update the percentage values when they are changed
+document.getElementById('return1').addEventListener('input', function() { updateSliderValue('return1'); });
+document.getElementById('return2').addEventListener('input', function() { updateSliderValue('return2'); });
+document.getElementById('return3').addEventListener('input', function() { updateSliderValue('return3'); });
+document.getElementById('return4').addEventListener('input', function() { updateSliderValue('return4'); });
+document.getElementById('return5').addEventListener('input', function() { updateSliderValue('return5'); });
+document.getElementById('return6').addEventListener('input', function() { updateSliderValue('return6'); });
