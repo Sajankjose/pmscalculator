@@ -3,6 +3,17 @@ body {
     margin: 20px;
     background-color: #E8FCFA;
 }
+
+.header {
+    text-align: left;
+    margin-bottom: 20px;
+}
+
+.logo {
+    width: 150px;
+    height: auto;
+}
+
 .container {
     background-color: #FFFFFF;
     padding: 20px;
@@ -12,15 +23,18 @@ body {
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
     color: #393341;
 }
+
 .form-group {
     margin-bottom: 15px;
 }
+
 label {
     display: block;
     margin-bottom: 5px;
     font-size: 16px;
     color: #393341;
 }
+
 input[type="number"], input[type="range"] {
     width: 100%;
     padding: 10px;
@@ -30,45 +44,78 @@ input[type="number"], input[type="range"] {
     font-size: 14px;
     color: #393341;
 }
+
 .range-output {
     text-align: right;
     font-size: 14px;
     color: #393341;
 }
+
 button {
     padding: 10px 20px;
-    background-color: #07877B;
-    color: #FFFFFF;
+    background-color: #F6D970;
+    color: #393341;
     border: none;
     border-radius: 5px;
     cursor: pointer;
     font-size: 16px;
     font-weight: 600;
+    display: block;
+    margin: 20px auto 0 auto;
+    text-align: center;
 }
+
 button:hover {
-    background-color: #048C71;
+    background-color: #E8C860;
 }
+
 .result {
     margin-top: 20px;
     font-weight: bold;
     font-size: 14px;
 }
+
 table {
     width: 100%;
     border-collapse: collapse;
     margin-top: 20px;
 }
+
 table, th, td {
     border: 1px solid #AFAFAF;
 }
+
 th, td {
     padding: 10px;
     text-align: right;
+    height: 40px;
 }
+
 th {
     background-color: #07877B;
     color: #FFFFFF;
 }
-@charset "utf-8";
-/* CSS Document */
 
+td:nth-child(odd) {
+    background-color: #FFFFFF;
+}
+
+td:nth-child(even) {
+    background-color: #E8FCFA;
+}
+
+.footer {
+    margin-top: 40px;
+    font-size: 12px;
+    text-align: center;
+    color: #393341;
+}
+
+.footer a {
+    color: #07877B;
+    text-decoration: none;
+}
+
+.footer a:hover {
+    text-decoration: underline;
+}
