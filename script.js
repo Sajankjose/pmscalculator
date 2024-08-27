@@ -1,13 +1,10 @@
-// Function to update the percentage value displayed next to the slider
 function updateSliderValue(sliderId) {
     const slider = document.getElementById(sliderId);
     const output = document.getElementById(sliderId + '-output');
     output.innerHTML = slider.value + '%';
 }
 
-// Function to calculate the fees and NAV based on the input values
 function calculateFees() {
-    // Retrieve input values
     const investment = parseFloat(document.getElementById('investment').value);
     const fixedFeeRate = parseFloat(document.getElementById('fixedFee').value) / 100;
     const otherExpensesRate = parseFloat(document.getElementById('otherExpenses').value) / 100;
@@ -24,6 +21,7 @@ function calculateFees() {
     let highWatermark = investment;
     let totalFixedFees = 0;
     let totalOtherExpenses = 0;
+    let totalPerformanceFees = 0;
     let totalFees = 0;
     let yearEndNav = investment;
     let resultTable = `
@@ -31,6 +29,7 @@ function calculateFees() {
             <tr>
                 <th>Particulars</th>
                 <th>Fixed Fee</th>
+                <th>Performance Fee</th>
                 <th>Other Expenses</th>
                 <th>High Watermark</th>
                 <th>Total Fees + Other Expenses</th>
@@ -39,26 +38,41 @@ function calculateFees() {
     `;
 
     for (let i = 0; i < period; i++) {
-        // Calculate the year-end NAV
         yearEndNav = highWatermark * (1 + returns[i]);
 
-        // Calculate the fees
-        const fixedFee = highWatermark * fixedFeeRate;
+        // Apply fee structures based on the conditions provided
+        let fixedFee = highWatermark * fixedFeeRate;
+        let performanceFee = 0;
+        const hurdleRate = fixedFeeRate === 0.01 ? 0.10 : fixedFeeRate === 0.02 ? 0.15 : 0;
+        const performanceFeeRate = 0.20;
+        
+        // Apply performance fee only if there's a hurdle rate to surpass
+        if (hurdleRate > 0 && (returns[i] > hurdleRate)) {
+            performanceFee = highWatermark * performanceFeeRate * (returns[i] - hurdleRate);
+        }
+
+        // Apply maximum cap of 0.50% for the total fixed fee
+        const maxFeeCap = highWatermark * 0.005;
+        fixedFee = Math.min(fixedFee, maxFeeCap);
+        performanceFee = Math.min(performanceFee, maxFeeCap);
+
+        // Calculate other expenses
         const otherExpenses = highWatermark * otherExpensesRate;
-        const totalYearlyFees = fixedFee + otherExpenses;
+
+        const totalYearlyFees = fixedFee + performanceFee + otherExpenses;
 
         totalFixedFees += fixedFee;
+        totalPerformanceFees += performanceFee;
         totalOtherExpenses += otherExpenses;
         totalFees += totalYearlyFees;
 
-        // Update the high watermark
         highWatermark = Math.max(highWatermark, yearEndNav);
 
-        // Append the results for the current year to the table
         resultTable += `
             <tr>
                 <td>Year ${i + 1}</td>
                 <td>INR ${fixedFee.toLocaleString(undefined, {minimumFractionDigits: 0, maximumFractionDigits: 0})}</td>
+                <td>INR ${performanceFee.toLocaleString(undefined, {minimumFractionDigits: 0, maximumFractionDigits: 0})}</td>
                 <td>INR ${otherExpenses.toLocaleString(undefined, {minimumFractionDigits: 0, maximumFractionDigits: 0})}</td>
                 <td>INR ${highWatermark.toLocaleString(undefined, {minimumFractionDigits: 0, maximumFractionDigits: 0})}</td>
                 <td>INR ${totalYearlyFees.toLocaleString(undefined, {minimumFractionDigits: 0, maximumFractionDigits: 0})}</td>
@@ -67,11 +81,11 @@ function calculateFees() {
         `;
     }
 
-    // Append the totals row to the table
     resultTable += `
         <tr>
             <td>Total</td>
             <td>INR ${totalFixedFees.toLocaleString(undefined, {minimumFractionDigits: 0, maximumFractionDigits: 0})}</td>
+            <td>INR ${totalPerformanceFees.toLocaleString(undefined, {minimumFractionDigits: 0, maximumFractionDigits: 0})}</td>
             <td>INR ${totalOtherExpenses.toLocaleString(undefined, {minimumFractionDigits: 0, maximumFractionDigits: 0})}</td>
             <td>-</td>
             <td>INR ${totalFees.toLocaleString(undefined, {minimumFractionDigits: 0, maximumFractionDigits: 0})}</td>
@@ -80,7 +94,6 @@ function calculateFees() {
     `;
     resultTable += '</table>';
 
-    // Display the result table in the HTML
     document.getElementById('result').innerHTML = resultTable;
 }
 
