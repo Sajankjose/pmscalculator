@@ -4,8 +4,24 @@ function updateSliderValue(sliderId) {
     output.innerHTML = slider.value + '%';
 }
 
+function validateOtherExpenses() {
+    const otherExpenses = parseFloat(document.getElementById('otherExpenses').value);
+    if (otherExpenses < 0.20 || otherExpenses > 0.50) {
+        alert('Other Expenses must be between 0.20% and 0.50%');
+        document.getElementById('otherExpenses').value = 0.20;
+    }
+}
+
 function updateSliders() {
     const period = parseInt(document.getElementById('period').value);
+    const maxPeriod = 20;
+
+    if (period < 1 || period > maxPeriod) {
+        alert(`Please enter a period between 1 and ${maxPeriod} years.`);
+        document.getElementById('period').value = 6; // Reset to a default value
+        return;
+    }
+
     const sliderContainer = document.getElementById('sliderContainer');
     sliderContainer.innerHTML = ''; // Clear existing sliders
 
