@@ -50,8 +50,14 @@ input[type="number"], input[type="range"] {
     justify-content: space-between;
 }
 
+.radio-group label {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
 input[type="radio"] {
-    margin-right: 5px;
+    margin-right: 2px;
 }
 
 .range-output {
@@ -84,6 +90,39 @@ button:hover {
     font-size: 14px;
 }
 
+.result table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+    border: 1px solid #AFAFAF;
+}
+
+.result th, .result td {
+    padding: 10px;
+    text-align: right;
+    border: 1px solid #AFAFAF;
+}
+
+.result th {
+    background-color: #07877B;
+    color: #FFFFFF;
+}
+
+.result tr:nth-child(even) {
+    background-color: #E8FCFA;
+}
+
+.result tr:nth-child(odd) {
+    background-color: #FFFFFF;
+}
+
+.result td small {
+    display: block;
+    color: #555;
+    font-size: 12px;
+    text-align: left;
+}
+
 .footer {
     margin-top: 40px;
     font-size: 12px;
@@ -102,4 +141,13 @@ button:hover {
 
 .footer ul {
     padding-left: 20px;
+}
+
+/* Make table responsive with sliding option */
+.result {
+    overflow-x: auto;
+}
+
+.result table {
+    min-width: 700px; /* Adjust this value if needed */
 }
