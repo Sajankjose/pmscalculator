@@ -5,19 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>PMS Fee Calculator</title>
     <link rel="stylesheet" href="styles.css">
-
-
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PMS Fee Calculator</title>
-    <link rel="stylesheet" href="styles.css">
-
-    <!-- Include jsPDF and autoTable Libraries -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.3.1/jspdf.umd.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.13/jspdf.plugin.autotable.min.js"></script>
-
-
-
 </head>
 <body>
 
@@ -27,53 +14,37 @@
     </div>
 
     <h2>PMS Fee Calculator</h2>
+
     <div class="form-group">
         <label for="investment">Initial Investment (₹):</label>
         <input type="number" id="investment" value="6000000">
     </div>
+
     <div class="form-group">
         <label for="fixedFee">Fixed Fee (%):</label>
-        <input type="number" id="fixedFee" value="1" step="0.01">
+        <div id="fixedFee">
+            <input type="radio" id="fixedFee1" name="fixedFee" value="1" checked>
+            <label for="fixedFee1">1%</label><br>
+            <input type="radio" id="fixedFee2" name="fixedFee" value="2">
+            <label for="fixedFee2">2%</label><br>
+            <input type="radio" id="fixedFee3" name="fixedFee" value="3">
+            <label for="fixedFee3">3%</label>
+        </div>
     </div>
+
     <div class="form-group">
         <label for="otherExpenses">Other Expenses (%):</label>
-        <input type="number" id="otherExpenses" value="0.20" step="0.01">
+        <input type="number" id="otherExpenses" value="0.20" step="0.01" max="0.50">
     </div>
+
     <div class="form-group">
         <label for="period">Period of Investment (Years):</label>
-        <input type="number" id="period" value="6">
+        <input type="number" id="period" value="6" oninput="updateSliders()">
     </div>
-    <div class="form-group">
-        <label for="return1">Expected Return in Year 1 (%):</label>
-        <input type="range" id="return1" min="0" max="100" value="12" oninput="updateSliderValue('return1')">
-        <div class="range-output" id="return1-output">12%</div>
-    </div>
-    <div class="form-group">
-        <label for="return2">Expected Return in Year 2 (%):</label>
-        <input type="range" id="return2" min="0" max="100" value="15" oninput="updateSliderValue('return2')">
-        <div class="range-output" id="return2-output">15%</div>
-    </div>
-    <div class="form-group">
-        <label for="return3">Expected Return in Year 3 (%):</label>
-        <input type="range" id="return3" min="0" max="100" value="25" oninput="updateSliderValue('return3')">
-        <div class="range-output" id="return3-output">25%</div>
-    </div>
-    <div class="form-group">
-        <label for="return4">Expected Return in Year 4 (%):</label>
-        <input type="range" id="return4" min="0" max="100" value="38" oninput="updateSliderValue('return4')">
-        <div class="range-output" id="return4-output">38%</div>
-    </div>
-    <div class="form-group">
-        <label for="return5">Expected Return in Year 5 (%):</label>
-        <input type="range" id="return5" min="0" max="100" value="15" oninput="updateSliderValue('return5')">
-        <div class="range-output" id="return5-output">15%</div>
-    </div>
-    <div class="form-group">
-        <label for="return6">Expected Return in Year 6 (%):</label>
-        <input type="range" id="return6" min="0" max="100" value="10" oninput="updateSliderValue('return6')">
-        <div class="range-output" id="return6-output">10%</div>
-    </div>
-    <button onclick="generatePDF()">Download Fee Structure</button>
+
+    <div id="sliderContainer"></div>
+
+    <button onclick="generatePDF()">Download PDF</button>
 
     <div class="footer">
         <p>Note:</p>
