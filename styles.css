@@ -35,7 +35,7 @@ label {
     color: #393341;
 }
 
-input[type="number"], input[type="range"] {
+input[type="text"], input[type="number"], input[type="range"] {
     width: 100%;
     padding: 10px;
     box-sizing: border-box;
@@ -47,7 +47,7 @@ input[type="number"], input[type="range"] {
 
 .radio-group {
     display: flex;
-    justify-content: space-between;
+    gap: 10px;
 }
 
 .radio-group label {
@@ -57,7 +57,7 @@ input[type="number"], input[type="range"] {
 }
 
 input[type="radio"] {
-    margin-right: 2px;
+    margin-right: 5px;
 }
 
 .range-output {
