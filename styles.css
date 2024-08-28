@@ -45,6 +45,11 @@ input[type="number"], input[type="range"] {
     color: #393341;
 }
 
+.radio-group {
+    display: flex;
+    gap: 10px;
+}
+
 input[type="radio"] {
     margin-right: 5px;
 }
