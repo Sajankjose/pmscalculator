@@ -4,6 +4,15 @@ function updateSliderValue(sliderId) {
     output.innerHTML = slider.value + '%';
 }
 
+function formatInvestment() {
+    let investment = document.getElementById('investment').value.replace(/,/g, '');
+    if (investment < 5000000) {
+        alert('Minimum investment amount is ₹50,00,000.');
+        investment = 5000000;
+    }
+    document.getElementById('investment').value = parseInt(investment).toLocaleString('en-IN');
+}
+
 function validateOtherExpenses() {
     const otherExpenses = parseFloat(document.getElementById('otherExpenses').value);
     if (otherExpenses < 0.20 || otherExpenses > 0.50) {
@@ -54,7 +63,7 @@ function updateSliders() {
 }
 
 function calculateResults() {
-    const investment = parseFloat(document.getElementById('investment').value);
+    let investment = parseFloat(document.getElementById('investment').value.replace(/,/g, ''));
     const fixedFeeOption = parseFloat(document.querySelector('input[name="fixedFee"]:checked').value);
     const otherExpensesRate = parseFloat(document.getElementById('otherExpenses').value) / 100;
     const period = parseInt(document.getElementById('period').value);
@@ -63,7 +72,6 @@ function calculateResults() {
     let totalFixedFees = 0;
     let totalOtherExpenses = 0;
     let totalPerformanceFees = 0;
-    let totalFees = 0;
     let yearEndNav = investment;
     let resultHtml = `
         <table>
@@ -71,8 +79,9 @@ function calculateResults() {
                 <th>Year</th>
                 <th>Fixed Fee (₹)</th>
                 <th>Other Expenses (₹)</th>
-                <th>Performance Fee (₹)</th>
                 <th>High Watermark (₹)</th>
+                <th>Performance Fee (₹)</th>
+                <th>Total Fees+ Other Expenses (₹)</th>
                 <th>Year End NAV (₹)</th>
             </tr>
     `;
@@ -124,17 +133,14 @@ function calculateResults() {
         totalFixedFees += fixedFee;
         totalOtherExpenses += otherExpenses;
         totalPerformanceFees += performanceFee;
-        totalFees += totalYearlyFees;
 
         resultHtml += `
             <tr>
                 <td>Year ${i}</td>
                 <td>₹${fixedFee.toLocaleString('en-IN', { minimumFractionDigits: 2 })}</td>
                 <td>₹${otherExpenses.toLocaleString('en-IN', { minimumFractionDigits: 2 })}</td>
-                <td>
-                    ₹${performanceFee.toLocaleString('en-IN', { minimumFractionDigits: 2 })} <br>
-                    <small>(High Watermark: ₹${highWatermark.toLocaleString('en-IN', { minimumFractionDigits: 2 })}, Hurdle Rate: ${hurdleRate * 100}%)</small>
-                </td>
+                <td>₹${highWatermark.toLocaleString('en-IN', { minimumFractionDigits: 2 })}</td>
+                <td>₹${performanceFee.toLocaleString('en-IN', { minimumFractionDigits: 2 })}</td>
                 <td>₹${totalYearlyFees.toLocaleString('en-IN', { minimumFractionDigits: 2 })}</td>
                 <td>₹${yearEndNav.toLocaleString('en-IN', { minimumFractionDigits: 2 })}</td>
             </tr>
@@ -146,8 +152,10 @@ function calculateResults() {
             <td>Total</td>
             <td>₹${totalFixedFees.toLocaleString('en-IN', { minimumFractionDigits: 2 })}</td>
             <td>₹${totalOtherExpenses.toLocaleString('en-IN', { minimumFractionDigits: 2 })}</td>
+            <td>-</td>
             <td>₹${totalPerformanceFees.toLocaleString('en-IN', { minimumFractionDigits: 2 })}</td>
-            <td colspan="2">-</td>
+            <td>-</td>
+            <td>₹${yearEndNav.toLocaleString('en-IN', { minimumFractionDigits: 2 })}</td>
         </tr>
     `;
     resultHtml += '</table>';
