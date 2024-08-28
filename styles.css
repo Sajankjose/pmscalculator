@@ -47,7 +47,7 @@ input[type="number"], input[type="range"] {
 
 .radio-group {
     display: flex;
-    gap: 10px;
+    justify-content: space-between;
 }
 
 input[type="radio"] {
@@ -76,6 +76,12 @@ button {
 
 button:hover {
     background-color: #E8C860;
+}
+
+.result {
+    margin-top: 20px;
+    font-weight: bold;
+    font-size: 14px;
 }
 
 .footer {
