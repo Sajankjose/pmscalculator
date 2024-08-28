@@ -22,11 +22,11 @@
 
     <div class="form-group">
         <label for="fixedFee">Fixed Fee (%):</label>
-        <div id="fixedFee">
+        <div id="fixedFee" class="radio-group">
             <input type="radio" id="fixedFee1" name="fixedFee" value="1" checked>
-            <label for="fixedFee1">1%</label><br>
+            <label for="fixedFee1">1%</label>
             <input type="radio" id="fixedFee2" name="fixedFee" value="2">
-            <label for="fixedFee2">2%</label><br>
+            <label for="fixedFee2">2%</label>
             <input type="radio" id="fixedFee3" name="fixedFee" value="3">
             <label for="fixedFee3">3%</label>
         </div>
@@ -34,12 +34,12 @@
 
     <div class="form-group">
         <label for="otherExpenses">Other Expenses (%):</label>
-        <input type="number" id="otherExpenses" value="0.20" step="0.01" max="0.50">
+        <input type="number" id="otherExpenses" value="0.20" step="0.01" min="0.20" max="0.50" oninput="validateOtherExpenses()">
     </div>
 
     <div class="form-group">
         <label for="period">Period of Investment (Years):</label>
-        <input type="number" id="period" value="6" oninput="updateSliders()">
+        <input type="number" id="period" value="6" oninput="updateSliders()" min="1" max="20">
     </div>
 
     <div id="sliderContainer"></div>
