@@ -72,7 +72,7 @@ function calculateResults() {
                 <th>Fixed Fee (₹)</th>
                 <th>Other Expenses (₹)</th>
                 <th>Performance Fee (₹)</th>
-                <th>Total Fees (₹)</th>
+                <th>High Watermark (₹)</th>
                 <th>Year End NAV (₹)</th>
             </tr>
     `;
@@ -85,17 +85,24 @@ function calculateResults() {
         const averageNav = (highWatermark + navBeforeFees) / 2;
         let fixedFee = 0;
         let performanceFee = 0;
+        let hurdleRate = 0;
         
         // Calculate fixed fee and performance fee based on the selected option
         if (fixedFeeOption === 1) { // Option 3: 1% Flat fee + Performance Fee > 10% return
             fixedFee = averageNav * 0.01;
-            if (expectedReturn > 0.10) {
-                performanceFee = (navBeforeFees - highWatermark * 1.10) * 0.20;
+            hurdleRate = 0.10;
+            if (expectedReturn > hurdleRate) {
+                const hurdleAmount = highWatermark * (1 + hurdleRate);
+                const excessReturn = navBeforeFees - hurdleAmount;
+                performanceFee = excessReturn * 0.20;
             }
         } else if (fixedFeeOption === 2) { // Option 2: 2% Flat fee + Performance Fee > 15% return
             fixedFee = averageNav * 0.02;
-            if (expectedReturn > 0.15) {
-                performanceFee = (navBeforeFees - highWatermark * 1.15) * 0.20;
+            hurdleRate = 0.15;
+            if (expectedReturn > hurdleRate) {
+                const hurdleAmount = highWatermark * (1 + hurdleRate);
+                const excessReturn = navBeforeFees - hurdleAmount;
+                performanceFee = excessReturn * 0.20;
             }
         } else if (fixedFeeOption === 3) { // Option 1: 3% Flat fee
             fixedFee = averageNav * 0.03;
@@ -124,7 +131,10 @@ function calculateResults() {
                 <td>Year ${i}</td>
                 <td>₹${fixedFee.toLocaleString('en-IN', { minimumFractionDigits: 2 })}</td>
                 <td>₹${otherExpenses.toLocaleString('en-IN', { minimumFractionDigits: 2 })}</td>
-                <td>₹${performanceFee.toLocaleString('en-IN', { minimumFractionDigits: 2 })}</td>
+                <td>
+                    ₹${performanceFee.toLocaleString('en-IN', { minimumFractionDigits: 2 })} <br>
+                    <small>(High Watermark: ₹${highWatermark.toLocaleString('en-IN', { minimumFractionDigits: 2 })}, Hurdle Rate: ${hurdleRate * 100}%)</small>
+                </td>
                 <td>₹${totalYearlyFees.toLocaleString('en-IN', { minimumFractionDigits: 2 })}</td>
                 <td>₹${yearEndNav.toLocaleString('en-IN', { minimumFractionDigits: 2 })}</td>
             </tr>
@@ -137,8 +147,7 @@ function calculateResults() {
             <td>₹${totalFixedFees.toLocaleString('en-IN', { minimumFractionDigits: 2 })}</td>
             <td>₹${totalOtherExpenses.toLocaleString('en-IN', { minimumFractionDigits: 2 })}</td>
             <td>₹${totalPerformanceFees.toLocaleString('en-IN', { minimumFractionDigits: 2 })}</td>
-            <td>₹${totalFees.toLocaleString('en-IN', { minimumFractionDigits: 2 })}</td>
-            <td>₹${yearEndNav.toLocaleString('en-IN', { minimumFractionDigits: 2 })}</td>
+            <td colspan="2">-</td>
         </tr>
     `;
     resultHtml += '</table>';
