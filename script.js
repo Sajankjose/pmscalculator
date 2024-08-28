@@ -4,7 +4,7 @@ function updateSliderValue(sliderId) {
     output.innerHTML = slider.value + '%';
 }
 
-function calculateFees() {
+function generatePDF() {
     const investment = parseFloat(document.getElementById('investment').value);
     const fixedFeeRate = parseFloat(document.getElementById('fixedFee').value) / 100;
     const otherExpensesRate = parseFloat(document.getElementById('otherExpenses').value) / 100;
@@ -25,19 +25,27 @@ function calculateFees() {
     let totalPerformanceFees = 0;
     let totalFees = 0;
     let yearEndNav = investment;
-    let resultTable = `
-        <table>
-            <tr>
-                <th>Particulars</th>
-                <th>Fixed Fee</th>
-                <th>Other Expenses</th>
-                <th>High Watermark</th>
-                <th>Performance Fee</th>
-                <th>Total Fees + Other Expenses</th>
-                <th>Year End NAV</th>
-            </tr>
-    `;
 
+    const { jsPDF } = window.jspdf;
+    const doc = new jsPDF();
+
+    // Add Geojit Logo
+    doc.addImage("https://www.geojit.com/img/Geojit_logo.svg", "SVG", 10, 10, 50, 15);
+
+    // Add Title
+    doc.setFontSize(16);
+    doc.text("PMS Fee Calculator", 10, 40);
+
+    // Add User Input Summary
+    doc.setFontSize(12);
+    doc.text("User Inputs:", 10, 50);
+    doc.text(`Initial Investment: ₹${investment.toLocaleString('en-IN')}`, 10, 60);
+    doc.text(`Fixed Fee: ${fixedFeeRate * 100}%`, 10, 70);
+    doc.text(`Other Expenses: ${otherExpensesRate * 100}%`, 10, 80);
+    doc.text(`Period of Investment: ${period} Years`, 10, 90);
+    doc.text(`Expected Returns: ${returns.map(r => (r * 100).toFixed(2) + '%').join(', ')}`, 10, 100);
+
+    const data = [];
     for (let i = 0; i < period; i++) {
         // Calculate the NAV before fees
         let navBeforeFees = highWatermark * (1 + returns[i]);
@@ -72,39 +80,34 @@ function calculateFees() {
         totalPerformanceFees += performanceFee;
         totalFees += totalYearlyFees;
 
-        resultTable += `
-            <tr>
-                <td>Year ${i + 1}</td>
-                <td>INR ${fixedFee.toLocaleString(undefined, {minimumFractionDigits: 0, maximumFractionDigits: 0})}</td>
-                <td>INR ${otherExpenses.toLocaleString(undefined, {minimumFractionDigits: 0, maximumFractionDigits: 0})}</td>
-                <td>INR ${highWatermark.toLocaleString(undefined, {minimumFractionDigits: 0, maximumFractionDigits: 0})}</td>
-                <td>INR ${performanceFee.toLocaleString(undefined, {minimumFractionDigits: 0, maximumFractionDigits: 0})}</td>
-                <td>INR ${totalYearlyFees.toLocaleString(undefined, {minimumFractionDigits: 0, maximumFractionDigits: 0})}</td>
-                <td>INR ${yearEndNav.toLocaleString(undefined, {minimumFractionDigits: 0, maximumFractionDigits: 0})}</td>
-            </tr>
-        `;
+        data.push([
+            `Year ${i + 1}`,
+            `₹${fixedFee.toLocaleString('en-IN', { minimumFractionDigits: 2 })}`,
+            `₹${otherExpenses.toLocaleString('en-IN', { minimumFractionDigits: 2 })}`,
+            `₹${highWatermark.toLocaleString('en-IN', { minimumFractionDigits: 2 })}`,
+            `₹${performanceFee.toLocaleString('en-IN', { minimumFractionDigits: 2 })}`,
+            `₹${totalYearlyFees.toLocaleString('en-IN', { minimumFractionDigits: 2 })}`,
+            `₹${yearEndNav.toLocaleString('en-IN', { minimumFractionDigits: 2 })}`
+        ]);
     }
 
-    resultTable += `
-        <tr>
-            <td>Total</td>
-            <td>INR ${totalFixedFees.toLocaleString(undefined, {minimumFractionDigits: 0, maximumFractionDigits: 0})}</td>
-            <td>INR ${totalOtherExpenses.toLocaleString(undefined, {minimumFractionDigits: 0, maximumFractionDigits: 0})}</td>
-            <td>-</td>
-            <td>INR ${totalPerformanceFees.toLocaleString(undefined, {minimumFractionDigits: 0, maximumFractionDigits: 0})}</td>
-            <td>INR ${totalFees.toLocaleString(undefined, {minimumFractionDigits: 0, maximumFractionDigits: 0})}</td>
-            <td>-</td>
-        </tr>
-    `;
-    resultTable += '</table>';
+    // Generate Table in PDF
+    doc.autoTable({
+        head: [['Particulars', 'Fixed Fee', 'Other Expenses', 'High Watermark', 'Performance Fee', 'Total Fees + Other Expenses', 'Year End NAV']],
+        body: data,
+        startY: 110
+    });
 
-    document.getElementById('result').innerHTML = resultTable;
+    // Add Footer Content
+    doc.setFontSize(10);
+    doc.text("Note:", 10, doc.autoTable.previous.finalY + 20);
+    doc.text("Fixed fees are charged on a quarterly basis", 10, doc.autoTable.previous.finalY + 30);
+    doc.text("Performance Fee is charged upon completion of 365 days from the investment date", 10, doc.autoTable.previous.finalY + 40);
+    doc.text("All fees and charges are exclusive of GST.", 10, doc.autoTable.previous.finalY + 50);
+
+    doc.text("Geojit Financial Services Ltd., Registered Office: 34/659-P, Civil Line Road, Padivattom, Kochi-682024, Kerala, India", 10, doc.autoTable.previous.finalY + 70);
+    doc.text("Phone: +91 484-2901000. Website: www.geojit.com. Portfolio Manager: INP000003203", 10, doc.autoTable.previous.finalY + 80);
+
+    // Save the PDF
+    doc.save('PMS_Fee_Calculator.pdf');
 }
-
-// Event listeners for the sliders to update the percentage values when they are changed
-document.getElementById('return1').addEventListener('input', function() { updateSliderValue('return1'); });
-document.getElementById('return2').addEventListener('input', function() { updateSliderValue('return2'); });
-document.getElementById('return3').addEventListener('input', function() { updateSliderValue('return3'); });
-document.getElementById('return4').addEventListener('input', function() { updateSliderValue('return4'); });
-document.getElementById('return5').addEventListener('input', function() { updateSliderValue('return5'); });
-document.getElementById('return6').addEventListener('input', function() { updateSliderValue('return6'); });
