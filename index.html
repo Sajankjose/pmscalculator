@@ -60,9 +60,7 @@
         <input type="range" id="return6" min="0" max="100" value="10" oninput="updateSliderValue('return6')">
         <div class="range-output" id="return6-output">10%</div>
     </div>
-    <button onclick="calculateFees()">Calculate</button>
-    
-    <div class="result" id="result"></div>
+    <button onclick="generatePDF()">Download PDF</button>
 
     <div class="footer">
         <p>Note:</p>
@@ -76,6 +74,8 @@
     </div>
 </div>
 
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.3.1/jspdf.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.13/jspdf.plugin.autotable.min.js"></script>
 <script src="script.js"></script>
 </body>
 </html>
