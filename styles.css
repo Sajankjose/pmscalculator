@@ -4,16 +4,6 @@ body {
     background-color: #E8FCFA;
 }
 
-.header {
-    text-align: left;
-    margin-bottom: 20px;
-}
-
-.logo {
-    width: 150px;
-    height: auto;
-}
-
 .container {
     background-color: #FFFFFF;
     padding: 20px;
@@ -22,6 +12,17 @@ body {
     margin: auto;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
     color: #393341;
+    position: relative;
+}
+
+.header {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.logo {
+    width: 150px;
+    height: auto;
 }
 
 .form-group {
@@ -73,6 +74,7 @@ button:hover {
     margin-top: 20px;
     font-weight: bold;
     font-size: 14px;
+    overflow-x: auto;
 }
 
 table {
@@ -107,8 +109,8 @@ td:nth-child(even) {
 .footer {
     margin-top: 40px;
     font-size: 12px;
-    text-align: center;
     color: #393341;
+    text-align: left;
 }
 
 .footer a {
