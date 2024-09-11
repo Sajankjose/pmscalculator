@@ -1,106 +1,66 @@
-body {
-    font-family: 'Open Sans', sans-serif;
-    margin: 20px;
-    background-color: #E8FCFA;
+function updateSliderValue(sliderId) {
+    const slider = document.getElementById(sliderId);
+    const output = document.getElementById(sliderId + '-output');
+    output.innerHTML = slider.value + '%';
 }
 
-.header {
-    text-align: center;
-    margin-bottom: 20px;
+function formatInvestment() {
+    let investment = document.getElementById('investment').value.replace(/,/g, '');
+    if (investment < 5000000) {
+        alert('Minimum investment amount is ₹50,00,000.');
+        investment = 5000000;
+    }
+    document.getElementById('investment').value = parseInt(investment).toLocaleString('en-IN');
 }
 
-.logo {
-    width: 150px;
-    height: auto;
+function updateSliders() {
+    const period = parseInt(document.getElementById('period').value);
+    const maxPeriod = 6;
+
+    if (period < 1 || period > maxPeriod) {
+        alert(`Please enter a period between 1 and ${maxPeriod} years.`);
+        document.getElementById('period').value = 6; // Reset to a default value
+        return;
+    }
+
+    const sliderContainer = document.getElementById('sliderContainer');
+    sliderContainer.innerHTML = ''; // Clear existing sliders
+
+    for (let i = 1; i <= period; i++) {
+        const sliderGroup = document.createElement('div');
+        sliderGroup.className = 'form-group';
+
+        const label = document.createElement('label');
+        label.htmlFor = `return${i}`;
+        label.innerText = `Expected Return in Year ${i} (%):`;
+        sliderGroup.appendChild(label);
+
+        const slider = document.createElement('input');
+        slider.type = 'range';
+        slider.id = `return${i}`;
+        slider.min = '0';
+        slider.max = '100';
+        slider.value = '10'; // Default value
+        slider.oninput = function() { updateSliderValue(slider.id); };
+        sliderGroup.appendChild(slider);
+
+        const rangeOutput = document.createElement('div');
+        rangeOutput.className = 'range-output';
+        rangeOutput.id = `return${i}-output`;
+        rangeOutput.innerText = '10%'; // Default output
+        sliderGroup.appendChild(rangeOutput);
+
+        sliderContainer.appendChild(sliderGroup);
+    }
 }
 
-.container {
-    background-color: #FFFFFF;
-    padding: 20px;
-    border-radius: 8px;
-    max-width: 600px;
-    margin: auto;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    color: #393341;
+function calculateResults() {
+    let investment = parseFloat(document.getElementById('investment').value.replace(/,/g, ''));
+    const fixedFeeOption = parseFloat(document.querySelector('input[name="fixedFee"]:checked').value);
+    const otherExpensesRate = parseFloat(document.getElementById('otherExpenses').value) / 100;
+    const period = parseInt(document.getElementById('period').value);
+
+    // Calculation logic here
 }
 
-.form-group {
-    margin-bottom: 15px;
-}
-
-label {
-    display: block;
-    margin-bottom: 5px;
-    font-size: 16px;
-    color: #393341;
-}
-
-input[type="text"], input[type="number"], select {
-    width: 100%;
-    padding: 10px;
-    box-sizing: border-box;
-    border: 1px solid #AFAFAF;
-    border-radius: 5px;
-    font-size: 14px;
-    color: #393341;
-}
-
-.radio-group {
-    display: flex;
-    flex-direction: column;
-}
-
-.radio-group label {
-    display: flex;
-    align-items: center;
-    margin-bottom: 5px;
-    gap: 5px;
-}
-
-input[type="radio"] {
-    margin-right: 5px;
-}
-
-button {
-    padding: 10px 20px;
-    background-color: #F6D970;
-    color: #393341;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    font-size: 16px;
-    font-weight: 600;
-    display: block;
-    margin: 20px auto 0 auto;
-    text-align: center;
-}
-
-button:hover {
-    background-color: #E8C860;
-}
-
-.result {
-    margin-top: 20px;
-    font-weight: bold;
-    font-size: 14px;
-}
-
-.note {
-    margin-top: 40px;
-    font-size: 12px;
-    color: #393341;
-    text-align: left;
-}
-
-.note a {
-    color: #07877B;
-    text-decoration: none;
-}
-
-.note a:hover {
-    text-decoration: underline;
-}
-
-.note ul {
-    padding-left: 20px;
-}
+// The rest of the script remains the same
