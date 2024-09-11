@@ -57,18 +57,40 @@ function updateSliders() {
     }
 }
 
+// Function to calculate Fixed Fee
+function calculateFixedFee(averageNav, fixedFeeRate) {
+    return averageNav * fixedFeeRate;
+}
+
+// Function to calculate Other Expenses
+function calculateOtherExpenses(averageNav, otherExpensesRate) {
+    return averageNav * otherExpensesRate;
+}
+
+// Function to calculate Performance Fee based on the Hurdle Rate
+function calculatePerformanceFee(navBeforeFees, highWatermark, hurdleRate, performanceFeeRate) {
+    const hurdleNav = highWatermark * (1 + hurdleRate);
+    if (navBeforeFees > hurdleNav) {
+        const excessReturn = navBeforeFees - hurdleNav;
+        return excessReturn * performanceFeeRate;
+    } 
+    return 0;
+}
+
 // Function to calculate and display results
 function calculateResults() {
     let investment = parseFloat(document.getElementById('investment').value.replace(/,/g, ''));
-    const fixedFeeOption = parseFloat(document.querySelector('input[name="fixedFee"]:checked').value);
+    const fixedFeeRate = parseFloat(document.querySelector('input[name="fixedFee"]:checked').value);
     const otherExpensesRate = parseFloat(document.getElementById('otherExpenses').value) / 100;
+    const hurdleRate = 0.1; // Fixed Hurdle Rate (10%)
+    const performanceFeeRate = 0.2; // Performance Fee is 20%
     const period = parseInt(document.getElementById('period').value);
 
     let highWatermark = investment;
+    let yearEndNav = investment;
     let totalFixedFees = 0;
     let totalOtherExpenses = 0;
     let totalPerformanceFees = 0;
-    let yearEndNav = investment;
 
     // Table structure to display results
     let resultHtml = `
@@ -86,45 +108,23 @@ function calculateResults() {
 
     for (let i = 1; i <= period; i++) {
         const expectedReturn = parseFloat(document.getElementById(`return${i}`).value) / 100;
-        const navBeforeFees = highWatermark * (1 + expectedReturn);
+        const navBeforeFees = yearEndNav * (1 + expectedReturn);
 
         // Calculate average NAV
-        const averageNav = (highWatermark + navBeforeFees) / 2;
-        let fixedFee = 0;
-        let performanceFee = 0;
-        let hurdleRate = 0;
+        const averageNav = (yearEndNav + navBeforeFees) / 2;
 
-        // Fixed fee calculation based on selected option
-        if (fixedFeeOption === 1) {
-            fixedFee = averageNav * 0.01;
-            hurdleRate = 0.10;
-            if (expectedReturn > hurdleRate) {
-                const hurdleAmount = highWatermark * (1 + hurdleRate);
-                const excessReturn = navBeforeFees - hurdleAmount;
-                performanceFee = excessReturn * 0.20;
-            }
-        } else if (fixedFeeOption === 2) {
-            fixedFee = averageNav * 0.02;
-            hurdleRate = 0.15;
-            if (expectedReturn > hurdleRate) {
-                const hurdleAmount = highWatermark * (1 + hurdleRate);
-                const excessReturn = navBeforeFees - hurdleAmount;
-                performanceFee = excessReturn * 0.20;
-            }
-        } else if (fixedFeeOption === 3) {
-            fixedFee = averageNav * 0.03;
-        }
-
-        // Calculate other expenses based on average NAV
-        const otherExpenses = averageNav * otherExpensesRate;
+        // Calculate fees
+        const fixedFee = calculateFixedFee(averageNav, fixedFeeRate);
+        const otherExpenses = calculateOtherExpenses(averageNav, otherExpensesRate);
+        const performanceFee = calculatePerformanceFee(navBeforeFees, highWatermark, hurdleRate, performanceFeeRate);
 
         // Total fees for the year
-        const totalYearlyFees = fixedFee + otherExpenses + performanceFee;
+        const totalFees = fixedFee + otherExpenses + performanceFee;
 
-        // Calculate Year End NAV after fees
-        yearEndNav = navBeforeFees - totalYearlyFees;
+        // Calculate Year End NAV after deducting fees
+        yearEndNav = navBeforeFees - totalFees;
 
-        // Update High Watermark if Year End NAV exceeds it
+        // Update high watermark if year-end NAV exceeds the current high watermark
         highWatermark = Math.max(highWatermark, yearEndNav);
 
         // Accumulate totals for each fee type
@@ -140,7 +140,7 @@ function calculateResults() {
                 <td>₹${otherExpenses.toLocaleString('en-IN', { minimumFractionDigits: 2 })}</td>
                 <td>₹${highWatermark.toLocaleString('en-IN', { minimumFractionDigits: 2 })}</td>
                 <td>₹${performanceFee.toLocaleString('en-IN', { minimumFractionDigits: 2 })}</td>
-                <td>₹${totalYearlyFees.toLocaleString('en-IN', { minimumFractionDigits: 2 })}</td>
+                <td>₹${totalFees.toLocaleString('en-IN', { minimumFractionDigits: 2 })}</td>
                 <td>₹${yearEndNav.toLocaleString('en-IN', { minimumFractionDigits: 2 })}</td>
             </tr>
         `;
