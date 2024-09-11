@@ -45,12 +45,15 @@
         <input type="number" id="period" value="6" min="1" max="6" oninput="updateSliders()">
     </div>
 
+    <!-- Dynamic Slider Container for Expected Return per Year -->
     <div id="sliderContainer"></div>
 
-    <button onclick="calculateResults()">Calculate</button>
+    <button type="button" onclick="calculateResults()">Calculate</button>
 
+    <!-- Result Table Display -->
     <div id="result" class="result"></div>
 
+    <!-- Note Section -->
     <div class="note">
         <p><strong>Note:</strong></p>
         <ul>
@@ -64,6 +67,7 @@
     </div>
 </div>
 
+<!-- Include the script for functionality -->
 <script src="script.js"></script>
 </body>
 </html>
