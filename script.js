@@ -57,9 +57,9 @@ function updateSliders() {
     }
 }
 
-// Function to calculate Fixed Fee
+// Function to calculate Fixed Fee (charged quarterly)
 function calculateFixedFee(averageNav, fixedFeeRate) {
-    return averageNav * fixedFeeRate;
+    return averageNav * (fixedFeeRate / 4); // Charge quarterly
 }
 
 // Function to calculate Other Expenses
@@ -110,7 +110,7 @@ function calculateResults() {
         const expectedReturn = parseFloat(document.getElementById(`return${i}`).value) / 100;
         const navBeforeFees = yearEndNav * (1 + expectedReturn);
 
-        // Calculate average NAV
+        // Calculate average NAV for the year
         const averageNav = (yearEndNav + navBeforeFees) / 2;
 
         // Calculate fees
