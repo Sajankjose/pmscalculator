@@ -54,13 +54,5 @@ function updateSliders() {
     }
 }
 
-function calculateResults() {
-    let investment = parseFloat(document.getElementById('investment').value.replace(/,/g, ''));
-    const fixedFeeOption = parseFloat(document.querySelector('input[name="fixedFee"]:checked').value);
-    const otherExpensesRate = parseFloat(document.getElementById('otherExpenses').value) / 100;
-    const period = parseInt(document.getElementById('period').value);
-
-    // Calculation logic here
-}
-
-// The rest of the script remains the same
+// Trigger the slider generation when the page loads
+document.addEventListener('DOMContentLoaded', updateSliders);
