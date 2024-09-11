@@ -54,5 +54,7 @@ function updateSliders() {
     }
 }
 
-// Trigger the slider generation when the page loads
-document.addEventListener('DOMContentLoaded', updateSliders);
+// Automatically generate the sliders when the page loads
+document.addEventListener('DOMContentLoaded', () => {
+    updateSliders();
+});
