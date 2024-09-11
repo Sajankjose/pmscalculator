@@ -1,9 +1,21 @@
+/* Global Styles */
 body {
     font-family: 'Open Sans', sans-serif;
     margin: 20px;
     background-color: #E8FCFA;
 }
 
+.container {
+    background-color: #FFFFFF;
+    padding: 20px;
+    border-radius: 8px;
+    max-width: 650px;
+    margin: auto;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    color: #393341;
+}
+
+/* Header Styles */
 .header {
     text-align: center;
     margin-bottom: 20px;
@@ -14,18 +26,9 @@ body {
     height: auto;
 }
 
-.container {
-    background-color: #FFFFFF;
-    padding: 20px;
-    border-radius: 8px;
-    max-width: 600px;
-    margin: auto;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    color: #393341;
-}
-
+/* Form Group Styles */
 .form-group {
-    margin-bottom: 15px;
+    margin-bottom: 20px;
 }
 
 label {
@@ -35,18 +38,20 @@ label {
     color: #393341;
 }
 
-input[type="text"], input[type="number"], input[type="range"] {
+input[type="text"], input[type="number"], select {
     width: 100%;
     padding: 10px;
-    box-sizing: border-box;
     border: 1px solid #AFAFAF;
     border-radius: 5px;
     font-size: 14px;
     color: #393341;
+    box-sizing: border-box;
 }
 
+/* Radio Button Styles */
 .radio-group {
     display: flex;
+    flex-direction: column;
     gap: 10px;
 }
 
@@ -60,12 +65,34 @@ input[type="radio"] {
     margin-right: 5px;
 }
 
+/* Slider Styles */
+input[type="range"] {
+    -webkit-appearance: none;
+    width: 100%;
+    height: 5px;
+    background: #48A08F;
+    border-radius: 5px;
+    outline: none;
+    margin-top: 5px;
+    margin-bottom: 10px;
+}
+
+input[type="range"]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    width: 15px;
+    height: 15px;
+    background: #07877B;
+    cursor: pointer;
+    border-radius: 50%;
+}
+
 .range-output {
     text-align: right;
     font-size: 14px;
     color: #393341;
 }
 
+/* Button Styles */
 button {
     padding: 10px 20px;
     background-color: #F6D970;
@@ -76,7 +103,7 @@ button {
     font-size: 16px;
     font-weight: 600;
     display: block;
-    margin: 20px auto 0 auto;
+    margin: 20px auto 0;
     text-align: center;
 }
 
@@ -84,12 +111,35 @@ button:hover {
     background-color: #E8C860;
 }
 
+/* Result Section */
 .result {
     margin-top: 20px;
     font-weight: bold;
     font-size: 14px;
 }
 
+/* Note Section Styles */
+.note {
+    margin-top: 40px;
+    font-size: 12px;
+    color: #393341;
+    text-align: left;
+}
+
+.note ul {
+    padding-left: 20px;
+}
+
+.note a {
+    color: #07877B;
+    text-decoration: none;
+}
+
+.note a:hover {
+    text-decoration: underline;
+}
+
+/* Responsive Table Styles */
 .result table {
     width: 100%;
     border-collapse: collapse;
@@ -123,31 +173,10 @@ button:hover {
     text-align: left;
 }
 
-.footer {
-    margin-top: 40px;
-    font-size: 12px;
-    color: #393341;
-    text-align: left;
-}
-
-.footer a {
-    color: #07877B;
-    text-decoration: none;
-}
-
-.footer a:hover {
-    text-decoration: underline;
-}
-
-.footer ul {
-    padding-left: 20px;
-}
-
-/* Make table responsive with sliding option */
 .result {
     overflow-x: auto;
 }
 
 .result table {
-    min-width: 700px; /* Adjust this value if needed */
+    min-width: 700px;
 }
