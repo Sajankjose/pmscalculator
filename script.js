@@ -1,11 +1,9 @@
-// Function to update the slider values dynamically
 function updateSliderValue(sliderId) {
     const slider = document.getElementById(sliderId);
     const output = document.getElementById(sliderId + '-output');
     output.innerHTML = slider.value + '%';
 }
 
-// Function to format the investment input with commas and validate minimum
 function formatInvestment() {
     let investment = document.getElementById('investment').value.replace(/,/g, '');
     if (investment < 5000000) {
@@ -15,49 +13,6 @@ function formatInvestment() {
     document.getElementById('investment').value = parseInt(investment).toLocaleString('en-IN');
 }
 
-// Function to dynamically generate sliders based on the number of years
-function updateSliders() {
-    const period = parseInt(document.getElementById('period').value);
-    const maxPeriod = 6;
-
-    if (period < 1 || period > maxPeriod) {
-        alert(`Please enter a period between 1 and ${maxPeriod} years.`);
-        document.getElementById('period').value = 6; // Reset to a default value
-        return;
-    }
-
-    const sliderContainer = document.getElementById('sliderContainer');
-    sliderContainer.innerHTML = ''; // Clear existing sliders
-
-    for (let i = 1; i <= period; i++) {
-        const sliderGroup = document.createElement('div');
-        sliderGroup.className = 'form-group';
-
-        const label = document.createElement('label');
-        label.htmlFor = `return${i}`;
-        label.innerText = `Expected Return in Year ${i} (%):`;
-        sliderGroup.appendChild(label);
-
-        const slider = document.createElement('input');
-        slider.type = 'range';
-        slider.id = `return${i}`;
-        slider.min = '0';
-        slider.max = '100';
-        slider.value = '10'; // Default value
-        slider.oninput = function() { updateSliderValue(slider.id); };
-        sliderGroup.appendChild(slider);
-
-        const rangeOutput = document.createElement('div');
-        rangeOutput.className = 'range-output';
-        rangeOutput.id = `return${i}-output`;
-        rangeOutput.innerText = '10%'; // Default output
-        sliderGroup.appendChild(rangeOutput);
-
-        sliderContainer.appendChild(sliderGroup);
-    }
-}
-
-// Function to calculate and display results
 function calculateResults() {
     let investment = parseFloat(document.getElementById('investment').value.replace(/,/g, ''));
     const fixedFeeOption = parseFloat(document.querySelector('input[name="fixedFee"]:checked').value);
@@ -94,7 +49,7 @@ function calculateResults() {
         let performanceFee = 0;
         let hurdleRate = 0;
 
-        // Calculate fixed fee and performance fee based on the selected option
+        // Fixed fee calculation based on selected option
         if (fixedFeeOption === 1) {
             fixedFee = averageNav * 0.01;
             hurdleRate = 0.10;
@@ -115,7 +70,7 @@ function calculateResults() {
             fixedFee = averageNav * 0.03;
         }
 
-        // Calculate other expenses
+        // Calculate other expenses based on average NAV
         const otherExpenses = averageNav * otherExpensesRate;
 
         // Total fees for the year
@@ -132,6 +87,7 @@ function calculateResults() {
         totalOtherExpenses += otherExpenses;
         totalPerformanceFees += performanceFee;
 
+        // Append row data to the result table
         resultHtml += `
             <tr>
                 <td>Year ${i}</td>
@@ -145,7 +101,7 @@ function calculateResults() {
         `;
     }
 
-    // Totals row in the table
+    // Total row for all fees
     resultHtml += `
         <tr>
             <td>Total</td>
