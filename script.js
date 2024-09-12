@@ -62,9 +62,10 @@ function calculateFixedFee(averageNav, fixedFeeRate) {
     return averageNav * fixedFeeRate;
 }
 
-// Function to calculate Other Expenses based on the average NAV after Fixed Fee
-function calculateOtherExpenses(averageNav, otherExpensesRate) {
-    return averageNav * otherExpensesRate;
+// Function to calculate Other Expenses based on the corrected NAV after Fixed Fee
+function calculateOtherExpenses(openingNav, navAfterFixedFee, otherExpensesRate) {
+    const averageNavOtherExpenses = (openingNav + navAfterFixedFee) / 2;
+    return averageNavOtherExpenses * otherExpensesRate;
 }
 
 // Function to calculate Performance Fee based on the Hurdle Rate and High Watermark
@@ -117,17 +118,17 @@ function calculateResults() {
         // Calculate NAV after Expected Return
         const navBeforeFees = yearEndNav * (1 + expectedReturn);
 
-        // Calculate the average NAV for the year (for Fixed Fee and Other Expenses)
-        const averageNav = (yearEndNav + navBeforeFees) / 2;
+        // Calculate the average NAV for the year (for Fixed Fee calculation)
+        const averageNavFixedFee = (yearEndNav + navBeforeFees) / 2;
 
         // Calculate Fixed Fee based on the average NAV
-        const fixedFee = calculateFixedFee(averageNav, fixedFeeRate);
+        const fixedFee = calculateFixedFee(averageNavFixedFee, fixedFeeRate);
 
         // NAV after Fixed Fee is deducted
         const navAfterFixedFee = navBeforeFees - fixedFee;
 
         // Calculate Other Expenses based on the average NAV after Fixed Fee
-        const otherExpenses = calculateOtherExpenses(averageNav, otherExpensesRate);
+        const otherExpenses = calculateOtherExpenses(yearEndNav, navAfterFixedFee, otherExpensesRate);
 
         // NAV after Other Expenses are deducted
         const navAfterOtherExpenses = navAfterFixedFee - otherExpenses;
@@ -156,11 +157,11 @@ function calculateResults() {
         resultHtml += `
             <tr>
                 <td>Year ${i}</td>
-                <td>₹${fixedFee.toLocaleString('en-IN', { minimumFractionDigits: 2 })}</td>
-                <td>₹${otherExpenses.toLocaleString('en-IN', { minimumFractionDigits: 2 })}</td>
-                <td>₹${performanceFee.toLocaleString('en-IN', { minimumFractionDigits: 2 })}</td>
-                <td>₹${totalFees.toLocaleString('en-IN', { minimumFractionDigits: 2 })}</td>
-                <td>₹${yearEndNav.toLocaleString('en-IN', { minimumFractionDigits: 2 })}</td>
+                <td>₹${fixedFee.toFixed(2).toLocaleString('en-IN')}</td>
+                <td>₹${otherExpenses.toFixed(2).toLocaleString('en-IN')}</td>
+                <td>₹${performanceFee.toFixed(2).toLocaleString('en-IN')}</td>
+                <td>₹${totalFees.toFixed(2).toLocaleString('en-IN')}</td>
+                <td>₹${yearEndNav.toFixed(2).toLocaleString('en-IN')}</td>
             </tr>
         `;
     }
@@ -169,11 +170,11 @@ function calculateResults() {
     resultHtml += `
         <tr>
             <td>Total</td>
-            <td>₹${totalFixedFees.toLocaleString('en-IN', { minimumFractionDigits: 2 })}</td>
-            <td>₹${totalOtherExpenses.toLocaleString('en-IN', { minimumFractionDigits: 2 })}</td>
-            <td>₹${totalPerformanceFees.toLocaleString('en-IN', { minimumFractionDigits: 2 })}</td>
+            <td>₹${totalFixedFees.toFixed(2).toLocaleString('en-IN')}</td>
+            <td>₹${totalOtherExpenses.toFixed(2).toLocaleString('en-IN')}</td>
+            <td>₹${totalPerformanceFees.toFixed(2).toLocaleString('en-IN')}</td>
             <td>-</td>
-            <td>₹${yearEndNav.toLocaleString('en-IN', { minimumFractionDigits: 2 })}</td>
+            <td>₹${yearEndNav.toFixed(2).toLocaleString('en-IN')}</td>
         </tr>
     `;
     resultHtml += '</table>';
