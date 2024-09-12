@@ -58,22 +58,20 @@ function updateSliders() {
 }
 
 // Function to calculate Fixed Fee based on average NAV
-function calculateFixedFee(initialNav, currentNav, fixedFeeRate) {
-    const averageNav = (initialNav + currentNav) / 2;
+function calculateFixedFee(averageNav, fixedFeeRate) {
     return averageNav * fixedFeeRate;
 }
 
 // Function to calculate Other Expenses based on the average NAV after Fixed Fee
-function calculateOtherExpenses(navAfterFixedFee, initialNav, otherExpensesRate) {
-    const averageNav = (navAfterFixedFee + initialNav) / 2;
+function calculateOtherExpenses(averageNav, otherExpensesRate) {
     return averageNav * otherExpensesRate;
 }
 
-// Function to calculate Performance Fee based on the Hurdle Rate
-function calculatePerformanceFee(navAfterFees, hurdleRate, highWatermark, performanceFeeRate) {
+// Function to calculate Performance Fee based on the Hurdle Rate and High Watermark
+function calculatePerformanceFee(navAfterOtherExpenses, highWatermark, hurdleRate, performanceFeeRate) {
     const hurdleAmount = highWatermark * (1 + hurdleRate);
-    if (navAfterFees > hurdleAmount) {
-        const excessGain = navAfterFees - hurdleAmount;
+    if (navAfterOtherExpenses > hurdleAmount) {
+        const excessGain = navAfterOtherExpenses - hurdleAmount;
         return excessGain * performanceFeeRate;
     }
     return 0;
@@ -115,31 +113,36 @@ function calculateResults() {
 
     for (let i = 1; i <= period; i++) {
         const expectedReturn = parseFloat(document.getElementById(`return${i}`).value) / 100;
+
+        // Calculate NAV after Expected Return
         const navBeforeFees = yearEndNav * (1 + expectedReturn);
 
-        // Calculate Fixed Fee
-        const fixedFee = calculateFixedFee(yearEndNav, navBeforeFees, fixedFeeRate);
+        // Calculate the average NAV for the year (for Fixed Fee and Other Expenses)
+        const averageNav = (yearEndNav + navBeforeFees) / 2;
 
-        // NAV after charging Fixed Fee
+        // Calculate Fixed Fee based on the average NAV
+        const fixedFee = calculateFixedFee(averageNav, fixedFeeRate);
+
+        // NAV after Fixed Fee is deducted
         const navAfterFixedFee = navBeforeFees - fixedFee;
 
-        // Calculate Other Expenses
-        const otherExpenses = calculateOtherExpenses(navAfterFixedFee, initialInvestment, otherExpensesRate);
+        // Calculate Other Expenses based on the average NAV after Fixed Fee
+        const otherExpenses = calculateOtherExpenses(averageNav, otherExpensesRate);
 
-        // NAV after charging Other Expenses
+        // NAV after Other Expenses are deducted
         const navAfterOtherExpenses = navAfterFixedFee - otherExpenses;
 
-        // Calculate Performance Fee (only for 1% and 2% slabs)
+        // Calculate Performance Fee (only if it exceeds the hurdle rate)
         let performanceFee = 0;
-        if (fixedFeeRate < 0.03) { // No performance fee for 3% slab
-            performanceFee = calculatePerformanceFee(navAfterOtherExpenses, hurdleRate, highWatermark, performanceFeeRate);
+        if (fixedFeeRate < 0.03) { // Performance Fee applicable only for 1% and 2% slabs
+            performanceFee = calculatePerformanceFee(navAfterOtherExpenses, highWatermark, hurdleRate, performanceFeeRate);
         }
 
-        // Total Fees for the Year
+        // Total Fees for the year (Fixed Fee + Other Expenses + Performance Fee)
         const totalFees = fixedFee + otherExpenses + performanceFee;
 
-        // Year-End NAV after charging all fees
-        yearEndNav = navBeforeFees - totalFees;
+        // Year-End NAV after deducting all fees
+        yearEndNav = navAfterOtherExpenses - performanceFee;
 
         // Update high watermark if Year-End NAV exceeds it
         highWatermark = Math.max(highWatermark, yearEndNav);
