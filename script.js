@@ -69,13 +69,23 @@ function calculateOtherExpenses(openingNav, navAfterFixedFee, otherExpensesRate)
 }
 
 // Function to calculate Performance Fee based on the Hurdle Rate and High Watermark
-function calculatePerformanceFee(navAfterOtherExpenses, highWatermark, hurdleRate, performanceFeeRate) {
+function calculatePerformanceFee(fundPerformanceAboveHurdleRate, performanceFeeRate) {
+    return fundPerformanceAboveHurdleRate > 0 ? fundPerformanceAboveHurdleRate * performanceFeeRate : 0;
+}
+
+// Function to calculate Fund Performance above High Watermark and Hurdle Rate
+function calculateFundPerformance(navAfterOtherExpenses, highWatermark, hurdleRate) {
+    // Fund performance above High Watermark
+    const fundPerformanceAboveHighWatermark = navAfterOtherExpenses - highWatermark;
+
+    // Calculate hurdle rate performance (difference between High Watermark and Hurdle Rate)
     const hurdleAmount = highWatermark * (1 + hurdleRate);
-    if (navAfterOtherExpenses > hurdleAmount) {
-        const excessGain = navAfterOtherExpenses - hurdleAmount;
-        return excessGain * performanceFeeRate;
-    }
-    return 0;
+    const fundPerformanceAboveHurdleRate = fundPerformanceAboveHighWatermark - (hurdleAmount - highWatermark);
+
+    return {
+        fundPerformanceAboveHighWatermark,
+        fundPerformanceAboveHurdleRate
+    };
 }
 
 // Function to calculate and display results
@@ -133,10 +143,16 @@ function calculateResults() {
         // NAV after Other Expenses are deducted
         const navAfterOtherExpenses = navAfterFixedFee - otherExpenses;
 
-        // Calculate Performance Fee (only if it exceeds the hurdle rate)
+        // Calculate Fund Performance above High Watermark and Hurdle Rate
+        const {
+            fundPerformanceAboveHighWatermark,
+            fundPerformanceAboveHurdleRate
+        } = calculateFundPerformance(navAfterOtherExpenses, highWatermark, hurdleRate);
+
+        // Calculate Performance Fee (only for 1% and 2% slabs)
         let performanceFee = 0;
         if (fixedFeeRate < 0.03) { // Performance Fee applicable only for 1% and 2% slabs
-            performanceFee = calculatePerformanceFee(navAfterOtherExpenses, highWatermark, hurdleRate, performanceFeeRate);
+            performanceFee = calculatePerformanceFee(fundPerformanceAboveHurdleRate, performanceFeeRate);
         }
 
         // Total Fees for the year (Fixed Fee + Other Expenses + Performance Fee)
