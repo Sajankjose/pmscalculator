@@ -200,4 +200,7 @@ function calculateResults() {
     resultHtml += '</table>';
 
     // Display the result in the HTML
-    document.getElementById('result').innerHTML
+    document.getElementById('result').innerHTML = resultHtml;
+}
+
+// Automatically
