@@ -114,11 +114,11 @@ function calculateResults() {
     let totalOtherExpenses = 0;
     let totalPerformanceFees = 0;
 
-    // Table structure to display results
+    // Table structure to display results with updated Year column width
     let resultHtml = `
         <table>
             <tr>
-                <th>Year</th>
+                <th style="width: 100px;">Year</th> <!-- Adjusted width for Year column -->
                 <th>Fixed Fee (₹)</th>
                 <th>Other Expenses (₹)</th>
                 <th>Performance Fee (₹)</th>
