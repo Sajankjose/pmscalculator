@@ -123,6 +123,7 @@ function calculateResults() {
                 <th>Other Expenses (₹)</th>
                 <th>Performance Fee (₹)</th>
                 <th>Total Fees (₹)</th>
+                <th>High Watermark (₹)</th>
                 <th>Year End NAV (₹)</th>
             </tr>
     `;
@@ -174,7 +175,7 @@ function calculateResults() {
         totalOtherExpenses += otherExpenses;
         totalPerformanceFees += performanceFee;
 
-        // Append row data to the result table with formatted numbers
+        // Append row data to the result table with formatted numbers, including High Watermark
         resultHtml += `
             <tr>
                 <td>Year ${i}</td>
@@ -182,6 +183,7 @@ function calculateResults() {
                 <td>${formatCurrency(otherExpenses)}</td>
                 <td>${formatCurrency(performanceFee)}</td>
                 <td>${formatCurrency(totalFees)}</td>
+                <td>${formatCurrency(highWatermark)}</td>
                 <td>${formatCurrency(yearEndNav)}</td>
             </tr>
         `;
@@ -194,6 +196,7 @@ function calculateResults() {
             <td>${formatCurrency(totalFixedFees)}</td>
             <td>${formatCurrency(totalOtherExpenses)}</td>
             <td>${formatCurrency(totalPerformanceFees)}</td>
+            <td>-</td>
             <td>-</td>
             <td>${formatCurrency(yearEndNav)}</td>
         </tr>
