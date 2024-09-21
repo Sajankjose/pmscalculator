@@ -83,10 +83,9 @@ function calculateFundPerformance(navAfterOtherExpenses, highWatermark, hurdleRa
     const hurdleAmount = highWatermark * (1 + hurdleRate);
     const fundPerformanceAboveHurdleRate = fundPerformanceAboveHighWatermark - (hurdleAmount - highWatermark);
 
-    // Ensure Fund Performance Above Hurdle Rate is not negative
     return {
         fundPerformanceAboveHighWatermark,
-        fundPerformanceAboveHurdleRate: fundPerformanceAboveHurdleRate > 0 ? fundPerformanceAboveHurdleRate : 0
+        fundPerformanceAboveHurdleRate: fundPerformanceAboveHurdleRate > 0 ? fundPerformanceAboveHurdleRate : 0 // Ensure it's not negative
     };
 }
 
@@ -102,8 +101,6 @@ function calculateResults() {
     // Set hurdle rate based on the selected fixed fee slab
     if (fixedFeeRate === 0.02) {
         hurdleRate = 0.15; // 15% hurdle rate for the 2% fixed fee slab
-    } else if (fixedFeeRate === 0.03) {
-        hurdleRate = 0; // No performance fee for 3% fixed fee
     }
 
     let highWatermark = initialInvestment; // Initialize high watermark
@@ -203,4 +200,7 @@ function calculateResults() {
     document.getElementById('result').innerHTML = resultHtml;
 }
 
-// Automatically
+// Automatically generate the sliders when the page loads
+document.addEventListener('DOMContentLoaded', () => {
+    updateSliders();
+});
