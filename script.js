@@ -70,7 +70,6 @@ function calculateOtherExpenses(openingNav, navAfterFixedFee, otherExpensesRate)
 
 // Function to calculate Performance Fee based on the Hurdle Rate and High Watermark
 function calculatePerformanceFee(fundPerformanceAboveHurdleRate, performanceFeeRate) {
-    // Apply 20% performance fee to the amount above the hurdle rate, if it's positive
     return fundPerformanceAboveHurdleRate > 0 ? fundPerformanceAboveHurdleRate * performanceFeeRate : 0;
 }
 
@@ -85,7 +84,7 @@ function calculateFundPerformance(navAfterOtherExpenses, highWatermark, hurdleRa
 
     return {
         fundPerformanceAboveHighWatermark,
-        fundPerformanceAboveHurdleRate: fundPerformanceAboveHurdleRate > 0 ? fundPerformanceAboveHurdleRate : 0 // Ensure it's not negative
+        fundPerformanceAboveHurdleRate: fundPerformanceAboveHurdleRate > 0 ? fundPerformanceAboveHurdleRate : 0
     };
 }
 
