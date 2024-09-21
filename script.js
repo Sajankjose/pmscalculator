@@ -1,3 +1,8 @@
+// Function to format numbers with commas for readability (e.g., ₹87,510.62)
+function formatCurrency(amount) {
+    return '₹' + parseFloat(amount).toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+}
+
 // Function to update the slider values dynamically
 function updateSliderValue(sliderId) {
     const slider = document.getElementById(sliderId);
@@ -70,7 +75,6 @@ function calculateOtherExpenses(openingNav, navAfterFixedFee, otherExpensesRate)
 
 // Function to calculate Performance Fee based on the Hurdle Rate and High Watermark
 function calculatePerformanceFee(fundPerformanceAboveHurdleRate, performanceFeeRate) {
-    // Apply 20% performance fee to the amount above the hurdle rate, if it's positive
     return fundPerformanceAboveHurdleRate > 0 ? fundPerformanceAboveHurdleRate * performanceFeeRate : 0;
 }
 
@@ -83,7 +87,10 @@ function calculateFundPerformance(navAfterOtherExpenses, highWatermark, hurdleRa
     const hurdleAmount = highWatermark * (1 + hurdleRate);
     const fundPerformanceAboveHurdleRate = fundPerformanceAboveHighWatermark - (hurdleAmount - highWatermark);
 
-    return fundPerformanceAboveHurdleRate > 0 ? fundPerformanceAboveHurdleRate : 0; // Ensure it's not negative
+    return {
+        fundPerformanceAboveHighWatermark,
+        fundPerformanceAboveHurdleRate: fundPerformanceAboveHurdleRate > 0 ? fundPerformanceAboveHurdleRate : 0 // Ensure it's not negative
+    };
 }
 
 // Function to calculate and display results
@@ -123,7 +130,7 @@ function calculateResults() {
     for (let i = 1; i <= period; i++) {
         const expectedReturn = parseFloat(document.getElementById(`return${i}`).value) / 100;
 
-        // Calculate NAV before fees
+        // Calculate NAV after Expected Return
         const navBeforeFees = yearEndNav * (1 + expectedReturn);
 
         // Calculate the average NAV for the year (for Fixed Fee calculation)
@@ -167,15 +174,15 @@ function calculateResults() {
         totalOtherExpenses += otherExpenses;
         totalPerformanceFees += performanceFee;
 
-        // Append row data to the result table
+        // Append row data to the result table with formatted numbers
         resultHtml += `
             <tr>
                 <td>Year ${i}</td>
-                <td>₹${fixedFee.toFixed(2).toLocaleString('en-IN')}</td>
-                <td>₹${otherExpenses.toFixed(2).toLocaleString('en-IN')}</td>
-                <td>₹${performanceFee.toFixed(2).toLocaleString('en-IN')}</td>
-                <td>₹${totalFees.toFixed(2).toLocaleString('en-IN')}</td>
-                <td>₹${yearEndNav.toFixed(2).toLocaleString('en-IN')}</td>
+                <td>${formatCurrency(fixedFee)}</td>
+                <td>${formatCurrency(otherExpenses)}</td>
+                <td>${formatCurrency(performanceFee)}</td>
+                <td>${formatCurrency(totalFees)}</td>
+                <td>${formatCurrency(yearEndNav)}</td>
             </tr>
         `;
     }
@@ -184,11 +191,11 @@ function calculateResults() {
     resultHtml += `
         <tr>
             <td>Total</td>
-            <td>₹${totalFixedFees.toFixed(2).toLocaleString('en-IN')}</td>
-            <td>₹${totalOtherExpenses.toFixed(2).toLocaleString('en-IN')}</td>
-            <td>₹${totalPerformanceFees.toFixed(2).toLocaleString('en-IN')}</td>
+            <td>${formatCurrency(totalFixedFees)}</td>
+            <td>${formatCurrency(totalOtherExpenses)}</td>
+            <td>${formatCurrency(totalPerformanceFees)}</td>
             <td>-</td>
-            <td>₹${yearEndNav.toFixed(2).toLocaleString('en-IN')}</td>
+            <td>${formatCurrency(yearEndNav)}</td>
         </tr>
     `;
     resultHtml += '</table>';
