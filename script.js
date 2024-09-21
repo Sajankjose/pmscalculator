@@ -70,6 +70,7 @@ function calculateOtherExpenses(openingNav, navAfterFixedFee, otherExpensesRate)
 
 // Function to calculate Performance Fee based on the Hurdle Rate and High Watermark
 function calculatePerformanceFee(fundPerformanceAboveHurdleRate, performanceFeeRate) {
+    // Apply 20% performance fee to the amount above the hurdle rate, if it's positive
     return fundPerformanceAboveHurdleRate > 0 ? fundPerformanceAboveHurdleRate * performanceFeeRate : 0;
 }
 
@@ -82,6 +83,7 @@ function calculateFundPerformance(navAfterOtherExpenses, highWatermark, hurdleRa
     const hurdleAmount = highWatermark * (1 + hurdleRate);
     const fundPerformanceAboveHurdleRate = fundPerformanceAboveHighWatermark - (hurdleAmount - highWatermark);
 
+    // Ensure Fund Performance Above Hurdle Rate is not negative
     return {
         fundPerformanceAboveHighWatermark,
         fundPerformanceAboveHurdleRate: fundPerformanceAboveHurdleRate > 0 ? fundPerformanceAboveHurdleRate : 0
@@ -100,6 +102,8 @@ function calculateResults() {
     // Set hurdle rate based on the selected fixed fee slab
     if (fixedFeeRate === 0.02) {
         hurdleRate = 0.15; // 15% hurdle rate for the 2% fixed fee slab
+    } else if (fixedFeeRate === 0.03) {
+        hurdleRate = 0; // No performance fee for 3% fixed fee
     }
 
     let highWatermark = initialInvestment; // Initialize high watermark
@@ -196,10 +200,4 @@ function calculateResults() {
     resultHtml += '</table>';
 
     // Display the result in the HTML
-    document.getElementById('result').innerHTML = resultHtml;
-}
-
-// Automatically generate the sliders when the page loads
-document.addEventListener('DOMContentLoaded', () => {
-    updateSliders();
-});
+    document.getElementById('result').innerHTML
