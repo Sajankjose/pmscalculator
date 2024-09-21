@@ -83,10 +83,7 @@ function calculateFundPerformance(navAfterOtherExpenses, highWatermark, hurdleRa
     const hurdleAmount = highWatermark * (1 + hurdleRate);
     const fundPerformanceAboveHurdleRate = fundPerformanceAboveHighWatermark - (hurdleAmount - highWatermark);
 
-    return {
-        fundPerformanceAboveHighWatermark,
-        fundPerformanceAboveHurdleRate: fundPerformanceAboveHurdleRate > 0 ? fundPerformanceAboveHurdleRate : 0 // Ensure it's not negative
-    };
+    return fundPerformanceAboveHurdleRate > 0 ? fundPerformanceAboveHurdleRate : 0; // Ensure it's not negative
 }
 
 // Function to calculate and display results
@@ -126,7 +123,7 @@ function calculateResults() {
     for (let i = 1; i <= period; i++) {
         const expectedReturn = parseFloat(document.getElementById(`return${i}`).value) / 100;
 
-        // Calculate NAV after Expected Return
+        // Calculate NAV before fees
         const navBeforeFees = yearEndNav * (1 + expectedReturn);
 
         // Calculate the average NAV for the year (for Fixed Fee calculation)
