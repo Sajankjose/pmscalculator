@@ -1,65 +1,6 @@
-// Function to format numbers with commas for readability (e.g., ₹87,510.62)
+// Function to format numbers with commas for readability
 function formatCurrency(amount) {
     return '₹' + parseFloat(amount).toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
-}
-
-// Function to update the slider values dynamically
-function updateSliderValue(sliderId) {
-    const slider = document.getElementById(sliderId);
-    const output = document.getElementById(sliderId + '-output');
-    output.innerHTML = slider.value + '%';
-}
-
-// Function to format the investment input with commas and validate minimum
-function formatInvestment() {
-    let investment = document.getElementById('investment').value.replace(/,/g, '');
-    if (investment < 5000000) {
-        alert('Minimum investment amount is ₹50,00,000.');
-        investment = 5000000;
-    }
-    document.getElementById('investment').value = parseInt(investment).toLocaleString('en-IN');
-}
-
-// Function to dynamically generate sliders based on the number of years
-function updateSliders() {
-    const period = parseInt(document.getElementById('period').value);
-    const maxPeriod = 6;
-
-    if (period < 1 || period > maxPeriod) {
-        alert(`Please enter a period between 1 and ${maxPeriod} years.`);
-        document.getElementById('period').value = 6; // Reset to a default value
-        return;
-    }
-
-    const sliderContainer = document.getElementById('sliderContainer');
-    sliderContainer.innerHTML = ''; // Clear existing sliders
-
-    for (let i = 1; i <= period; i++) {
-        const sliderGroup = document.createElement('div');
-        sliderGroup.className = 'form-group';
-
-        const label = document.createElement('label');
-        label.htmlFor = `return${i}`;
-        label.innerText = `Expected Return in Year ${i} (%):`;
-        sliderGroup.appendChild(label);
-
-        const slider = document.createElement('input');
-        slider.type = 'range';
-        slider.id = `return${i}`;
-        slider.min = '0';
-        slider.max = '100';
-        slider.value = '10'; // Default value
-        slider.oninput = function() { updateSliderValue(slider.id); };
-        sliderGroup.appendChild(slider);
-
-        const rangeOutput = document.createElement('div');
-        rangeOutput.className = 'range-output';
-        rangeOutput.id = `return${i}-output`;
-        rangeOutput.innerText = '10%'; // Default output
-        sliderGroup.appendChild(rangeOutput);
-
-        sliderContainer.appendChild(sliderGroup);
-    }
 }
 
 // Function to calculate Fixed Fee based on average NAV
@@ -67,7 +8,7 @@ function calculateFixedFee(averageNav, fixedFeeRate) {
     return averageNav * fixedFeeRate;
 }
 
-// Function to calculate Other Expenses based on the corrected NAV after Fixed Fee
+// Function to calculate Other Expenses based on the average NAV
 function calculateOtherExpenses(openingNav, navAfterFixedFee, otherExpensesRate) {
     const averageNavOtherExpenses = (openingNav + navAfterFixedFee) / 2;
     return averageNavOtherExpenses * otherExpensesRate;
@@ -80,16 +21,12 @@ function calculatePerformanceFee(fundPerformanceAboveHurdleRate, performanceFeeR
 
 // Function to calculate Fund Performance above High Watermark and Hurdle Rate
 function calculateFundPerformance(navAfterOtherExpenses, highWatermark, hurdleRate) {
-    // Fund performance above High Watermark
     const fundPerformanceAboveHighWatermark = navAfterOtherExpenses - highWatermark;
-
-    // Calculate hurdle rate performance (difference between High Watermark and Hurdle Rate)
     const hurdleAmount = highWatermark * (1 + hurdleRate);
     const fundPerformanceAboveHurdleRate = fundPerformanceAboveHighWatermark - (hurdleAmount - highWatermark);
-
     return {
         fundPerformanceAboveHighWatermark,
-        fundPerformanceAboveHurdleRate: fundPerformanceAboveHurdleRate > 0 ? fundPerformanceAboveHurdleRate : 0 // Ensure it's not negative
+        fundPerformanceAboveHurdleRate: fundPerformanceAboveHurdleRate > 0 ? fundPerformanceAboveHurdleRate : 0
     };
 }
 
@@ -102,23 +39,17 @@ function calculateResults() {
     let hurdleRate = 0.1; // Default Hurdle Rate (10%)
     const period = parseInt(document.getElementById('period').value);
 
-    // Set hurdle rate based on the selected fixed fee slab
-    if (fixedFeeRate === 0.02) {
-        hurdleRate = 0.15; // 15% hurdle rate for the 2% fixed fee slab
-    }
-
-    let highWatermark = initialInvestment; // Initialize high watermark
-    let yearEndNav = initialInvestment; // Initialize NAV for year-end
+    let highWatermark = initialInvestment;
+    let yearEndNav = initialInvestment;
 
     let totalFixedFees = 0;
     let totalOtherExpenses = 0;
     let totalPerformanceFees = 0;
 
-    // Table structure to display results with updated Year column width
     let resultHtml = `
         <table>
             <tr>
-                <th style="width: 100px;">Year</th> <!-- Adjusted width for Year column -->
+                <th style="width: 100px;">Year</th>
                 <th>Fixed Fee (₹)</th>
                 <th>Other Expenses (₹)</th>
                 <th>Performance Fee (₹)</th>
@@ -157,7 +88,7 @@ function calculateResults() {
 
         // Calculate Performance Fee (only for 1% and 2% slabs)
         let performanceFee = 0;
-        if (fixedFeeRate < 0.03) { // Performance Fee applicable only for 1% and 2% slabs
+        if (fixedFeeRate < 0.03) {
             performanceFee = calculatePerformanceFee(fundPerformanceAboveHurdleRate, performanceFeeRate);
         }
 
