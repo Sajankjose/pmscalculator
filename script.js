@@ -189,4 +189,21 @@ function calculateResults() {
     resultHtml += `
         <tr>
             <td>Total</td>
-            <td>${formatCurrency(totalFixedFees)}</
+            <td>${formatCurrency(totalFixedFees)}</td>
+            <td>${formatCurrency(totalOtherExpenses)}</td>
+            <td>${formatCurrency(totalPerformanceFees)}</td>
+            <td>-</td>
+            <td>-</td>
+            <td>${formatCurrency(yearEndNav)}</td>
+        </tr>
+    `;
+    resultHtml += '</table>';
+
+    // Display the result in the HTML
+    document.getElementById('result').innerHTML = resultHtml;
+}
+
+// Automatically generate the sliders when the page loads
+document.addEventListener('DOMContentLoaded', () => {
+    updateSliders();
+});
