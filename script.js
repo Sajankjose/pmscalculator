@@ -1,4 +1,4 @@
-// Function to format numbers with commas for readability
+// Function to format numbers with commas for readability (e.g., ₹87,510.62)
 function formatCurrency(amount) {
     return '₹' + parseFloat(amount).toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
 }
@@ -80,12 +80,16 @@ function calculatePerformanceFee(fundPerformanceAboveHurdleRate, performanceFeeR
 
 // Function to calculate Fund Performance above High Watermark and Hurdle Rate
 function calculateFundPerformance(navAfterOtherExpenses, highWatermark, hurdleRate) {
+    // Fund performance above High Watermark
     const fundPerformanceAboveHighWatermark = navAfterOtherExpenses - highWatermark;
+
+    // Calculate hurdle rate performance (difference between High Watermark and Hurdle Rate)
     const hurdleAmount = highWatermark * (1 + hurdleRate);
     const fundPerformanceAboveHurdleRate = fundPerformanceAboveHighWatermark - (hurdleAmount - highWatermark);
+
     return {
         fundPerformanceAboveHighWatermark,
-        fundPerformanceAboveHurdleRate: fundPerformanceAboveHurdleRate > 0 ? fundPerformanceAboveHurdleRate : 0
+        fundPerformanceAboveHurdleRate: fundPerformanceAboveHurdleRate > 0 ? fundPerformanceAboveHurdleRate : 0 // Ensure it's not negative
     };
 }
 
@@ -114,7 +118,7 @@ function calculateResults() {
     let resultHtml = `
         <table>
             <tr>
-                <th style="width: 100px;">Year</th>
+                <th style="width: 100px;">Year</th> <!-- Adjusted width for Year column -->
                 <th>Fixed Fee (₹)</th>
                 <th>Other Expenses (₹)</th>
                 <th>Performance Fee (₹)</th>
@@ -153,7 +157,7 @@ function calculateResults() {
 
         // Calculate Performance Fee (only for 1% and 2% slabs)
         let performanceFee = 0;
-        if (fixedFeeRate < 0.03) {
+        if (fixedFeeRate < 0.03) { // Performance Fee applicable only for 1% and 2% slabs
             performanceFee = calculatePerformanceFee(fundPerformanceAboveHurdleRate, performanceFeeRate);
         }
 
