@@ -212,4 +212,5 @@ function calculateResults() {
     document.getElementById('result').innerHTML = resultHtml;
 }
 
-// Automatically generate
+// Automatically generate the sliders when the page loads
+document.addEventListener
