@@ -210,3 +210,5 @@ function calculateResults() {
 }
 
 // Automatically generate the sliders when the page loads
+document.addEventListener('DOMContentLoaded', () => {
+    update
