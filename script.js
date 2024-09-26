@@ -107,7 +107,7 @@ function calculateResults() {
         hurdleRate = 0.15; // 15% hurdle rate for the 2% fixed fee slab
     }
 
-    let highWatermark = initialInvestment; // Initialize high watermark with initial investment
+    let highWatermark = initialInvestment; // Initialize high watermark as initial investment for Year 1
     let yearEndNav = initialInvestment; // Initialize NAV for year-end
 
     let totalFixedFees = 0;
@@ -210,5 +210,7 @@ function calculateResults() {
 }
 
 // Automatically generate the sliders when the page loads
-document.addEventListener('DOMContentLoaded', () => {
-    update
+document.addEventListener('DOMContentLoaded', () =>
+{
+    updateSliders();
+});
