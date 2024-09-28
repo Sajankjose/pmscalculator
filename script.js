@@ -108,7 +108,7 @@ function calculateResults() {
     }
 
     let highWatermark = initialInvestment; // Initialize high watermark
-    let yearEndNav = initialInvestment; // Initialize NAV for year-end
+    let yearOpeningNav = initialInvestment; // Initialize NAV for the start of each year
 
     let totalFixedFees = 0;
     let totalOtherExpenses = 0;
@@ -132,10 +132,10 @@ function calculateResults() {
         const expectedReturn = parseFloat(document.getElementById(`return${i}`).value) / 100;
 
         // Calculate Year-End NAV Before Fees
-        const yearEndNavBeforeFees = yearEndNav + (yearEndNav * expectedReturn);
+        const yearEndNavBeforeFees = yearOpeningNav + (yearOpeningNav * expectedReturn);
 
         // Calculate the average NAV for the year (for Fixed Fee calculation)
-        const averageNavFixedFee = (yearEndNav + yearEndNavBeforeFees) / 2;
+        const averageNavFixedFee = (yearOpeningNav + yearEndNavBeforeFees) / 2;
 
         // Calculate Fixed Fee based on the average NAV
         const fixedFee = calculateFixedFee(averageNavFixedFee, fixedFeeRate);
@@ -144,7 +144,7 @@ function calculateResults() {
         const navAfterFixedFee = yearEndNavBeforeFees - fixedFee;
 
         // Calculate Other Expenses based on the average NAV after Fixed Fee
-        const otherExpenses = calculateOtherExpenses(yearEndNav, navAfterFixedFee, otherExpensesRate);
+        const otherExpenses = calculateOtherExpenses(yearOpeningNav, navAfterFixedFee, otherExpensesRate);
 
         // NAV after Other Expenses are deducted
         const navAfterOtherExpenses = navAfterFixedFee - otherExpenses;
@@ -165,7 +165,7 @@ function calculateResults() {
         const totalFees = fixedFee + otherExpenses + performanceFee;
 
         // Year-End NAV after deducting all fees
-        yearEndNav = navAfterOtherExpenses - performanceFee;
+        const yearEndNav = navAfterOtherExpenses - performanceFee;
 
         // Update high watermark if Year-End NAV exceeds it
         highWatermark = Math.max(highWatermark, yearEndNav);
@@ -174,6 +174,9 @@ function calculateResults() {
         totalFixedFees += fixedFee;
         totalOtherExpenses += otherExpenses;
         totalPerformanceFees += performanceFee;
+
+        // Set Year Opening NAV for next iteration
+        yearOpeningNav = yearEndNav;
 
         // Append row data to the result table with formatted numbers, including High Watermark
         resultHtml += `
@@ -198,7 +201,7 @@ function calculateResults() {
             <td>${formatCurrency(totalPerformanceFees)}</td>
             <td>-</td>
             <td>-</td>
-            <td>${formatCurrency(yearEndNav)}</td>
+            <td>${formatCurrency(yearOpeningNav)}</td>
         </tr>
     `;
     resultHtml += '</table>';
