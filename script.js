@@ -107,7 +107,7 @@ function calculateResults() {
         hurdleRate = 0.15; // 15% hurdle rate for the 2% fixed fee slab
     }
 
-    let highWatermark = initialInvestment; // Initialize high watermark as initial investment for Year 1
+    let highWatermark = initialInvestment; // Initialize high watermark
     let yearEndNav = initialInvestment; // Initialize NAV for year-end
 
     let totalFixedFees = 0;
@@ -167,10 +167,8 @@ function calculateResults() {
         // Year-End NAV after deducting all fees
         yearEndNav = navAfterOtherExpenses - performanceFee;
 
-        // Set High Watermark for Year 1 as Initial Investment and update it only if Year-End NAV exceeds it
-        if (i > 1) {
-            highWatermark = Math.max(highWatermark, yearEndNav);
-        }
+        // Update high watermark if Year-End NAV exceeds it
+        highWatermark = Math.max(highWatermark, yearEndNav);
 
         // Accumulate totals for each fee type
         totalFixedFees += fixedFee;
@@ -210,7 +208,6 @@ function calculateResults() {
 }
 
 // Automatically generate the sliders when the page loads
-document.addEventListener('DOMContentLoaded', () =>
-{
+document.addEventListener('DOMContentLoaded', () => {
     updateSliders();
 });
