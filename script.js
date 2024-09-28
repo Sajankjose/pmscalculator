@@ -107,7 +107,8 @@ function calculateResults() {
         hurdleRate = 0.15; // 15% hurdle rate for the 2% fixed fee slab
     }
 
-    let highWatermark = initialInvestment; // Initialize high watermark
+    // Initialize high watermark as initial investment (Year 1)
+    let highWatermark = initialInvestment;
     let yearOpeningNav = initialInvestment; // Initialize NAV for the start of each year
 
     let totalFixedFees = 0;
@@ -205,6 +206,7 @@ function calculateResults() {
         </tr>
     `;
     resultHtml += '</table>';
+
 
     // Display the result in the HTML
     document.getElementById('result').innerHTML = resultHtml;
