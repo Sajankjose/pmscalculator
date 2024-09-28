@@ -107,7 +107,7 @@ function calculateResults() {
         hurdleRate = 0.15; // 15% hurdle rate for the 2% fixed fee slab
     }
 
-    let highWatermark = initialInvestment; // Initialize high watermark to initial investment
+    let highWatermark = initialInvestment; // Initialize high watermark
     let yearEndNav = initialInvestment; // Initialize NAV for year-end
 
     let totalFixedFees = 0;
@@ -131,17 +131,17 @@ function calculateResults() {
     for (let i = 1; i <= period; i++) {
         const expectedReturn = parseFloat(document.getElementById(`return${i}`).value) / 100;
 
-        // Calculate NAV after Expected Return
-        const navBeforeFees = yearEndNav * (1 + expectedReturn);
+        // Calculate Year-End NAV Before Fees
+        const yearEndNavBeforeFees = yearEndNav + (yearEndNav * expectedReturn);
 
         // Calculate the average NAV for the year (for Fixed Fee calculation)
-        const averageNavFixedFee = (yearEndNav + navBeforeFees) / 2;
+        const averageNavFixedFee = (yearEndNav + yearEndNavBeforeFees) / 2;
 
         // Calculate Fixed Fee based on the average NAV
         const fixedFee = calculateFixedFee(averageNavFixedFee, fixedFeeRate);
 
         // NAV after Fixed Fee is deducted
-        const navAfterFixedFee = navBeforeFees - fixedFee;
+        const navAfterFixedFee = yearEndNavBeforeFees - fixedFee;
 
         // Calculate Other Expenses based on the average NAV after Fixed Fee
         const otherExpenses = calculateOtherExpenses(yearEndNav, navAfterFixedFee, otherExpensesRate);
