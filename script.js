@@ -49,7 +49,7 @@ function updateSliders() {
         slider.min = '0';
         slider.max = '100';
         slider.value = '10'; // Default value
-        slider.oninput = function() { updateSliderValue(slider.id); };
+        slider.oninput = function () { updateSliderValue(slider.id); };
         sliderGroup.appendChild(slider);
 
         const rangeOutput = document.createElement('div');
@@ -107,9 +107,8 @@ function calculateResults() {
         hurdleRate = 0.15; // 15% hurdle rate for the 2% fixed fee slab
     }
 
-    let highWatermark = initialInvestment; // Initialize high watermark
+    let highWatermark = initialInvestment; // Initialize high watermark as the initial investment
     let yearEndNav = initialInvestment; // Initialize NAV for year-end
-    let maxHighWatermark = initialInvestment; // Track the maximum high watermark reached
 
     let totalFixedFees = 0;
     let totalOtherExpenses = 0;
@@ -133,7 +132,7 @@ function calculateResults() {
         const expectedReturn = parseFloat(document.getElementById(`return${i}`).value) / 100;
 
         // Calculate NAV after Expected Return
-        const navBeforeFees = yearEndNav + (yearEndNav * expectedReturn);
+        const navBeforeFees = yearEndNav * (1 + expectedReturn);
 
         // Calculate the average NAV for the year (for Fixed Fee calculation)
         const averageNavFixedFee = (yearEndNav + navBeforeFees) / 2;
@@ -150,14 +149,11 @@ function calculateResults() {
         // NAV after Other Expenses are deducted
         const navAfterOtherExpenses = navAfterFixedFee - otherExpenses;
 
-        // Update max high watermark for Performance Fee calculation
-        maxHighWatermark = Math.max(maxHighWatermark, yearEndNav);
-
         // Calculate Fund Performance above High Watermark and Hurdle Rate
         const {
             fundPerformanceAboveHighWatermark,
             fundPerformanceAboveHurdleRate
-        } = calculateFundPerformance(navAfterOtherExpenses, maxHighWatermark, hurdleRate);
+        } = calculateFundPerformance(navAfterOtherExpenses, highWatermark, hurdleRate);
 
         // Calculate Performance Fee (only for 1% and 2% slabs)
         let performanceFee = 0;
@@ -209,8 +205,9 @@ function calculateResults() {
 
     // Display the result in the HTML
     document.getElementById('result').innerHTML = resultHtml;
-
 }
+
+
 
 // Automatically generate the sliders when the page loads
 document.addEventListener('DOMContentLoaded', () => {
