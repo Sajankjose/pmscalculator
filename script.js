@@ -114,6 +114,7 @@ function calculateResults() {
     let totalFixedFees = 0;
     let totalOtherExpenses = 0;
     let totalPerformanceFees = 0;
+    let totalFees = 0;
 
     // Table structure to display results with updated Year column width
     let resultHtml = `
@@ -166,7 +167,7 @@ function calculateResults() {
         }
 
         // Total Fees for the year (Fixed Fee + Other Expenses + Performance Fee)
-        const totalFees = fixedFee + otherExpenses + performanceFee;
+        const totalFeesForYear = fixedFee + otherExpenses + performanceFee;
 
         // Year-End NAV after deducting all fees
         yearEndNav = navAfterOtherExpenses - performanceFee;
@@ -178,6 +179,7 @@ function calculateResults() {
         totalFixedFees += fixedFee;
         totalOtherExpenses += otherExpenses;
         totalPerformanceFees += performanceFee;
+        totalFees += totalFeesForYear;
 
         // Append row data to the result table with formatted numbers, including High Watermark
         resultHtml += `
@@ -187,7 +189,7 @@ function calculateResults() {
                 <td>${formatCurrency(otherExpenses)}</td>
                 <td>${formatCurrency(highWatermark)}</td>
                 <td>${formatCurrency(performanceFee)}</td>
-                <td>${formatCurrency(totalFees)}</td>
+                <td>${formatCurrency(totalFeesForYear)}</td>
                 <td>${formatCurrency(yearEndNav)}</td>
             </tr>
         `;
@@ -201,7 +203,7 @@ function calculateResults() {
             <td>${formatCurrency(totalOtherExpenses)}</td>
             <td>-</td>
             <td>${formatCurrency(totalPerformanceFees)}</td>
-            <td>-</td>
+            <td>${formatCurrency(totalFees)}</td>
             <td>-</td>
         </tr>
     `;
@@ -215,3 +217,4 @@ function calculateResults() {
 document.addEventListener('DOMContentLoaded', () => {
     updateSliders();
 });
+
