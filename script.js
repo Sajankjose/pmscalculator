@@ -10,16 +10,6 @@ function updateSliderValue(sliderId) {
     output.innerHTML = slider.value + '%';
 }
 
-// Function to format the investment input with commas and validate minimum
-function formatInvestment() {
-    let investment = document.getElementById('investment').value.replace(/,/g, '');
-    if (investment < 5000000) {
-        alert('Minimum investment amount is ₹50,00,000.');
-        investment = 5000000;
-    }
-    document.getElementById('investment').value = parseInt(investment).toLocaleString('en-IN');
-}
-
 // Function to dynamically generate sliders based on the number of years
 function updateSliders() {
     const period = parseInt(document.getElementById('period').value);
@@ -95,7 +85,13 @@ function calculateFundPerformance(navAfterOtherExpenses, highWatermark, hurdleRa
 
 // Function to calculate and display results
 function calculateResults() {
+    // Get initial investment and ensure it's not less than ₹50,00,000
     let initialInvestment = parseFloat(document.getElementById('investment').value.replace(/,/g, ''));
+    if (initialInvestment < 5000000) {
+        alert('Minimum investment amount is ₹50,00,000.');
+        return;
+    }
+
     const fixedFeeRate = parseFloat(document.querySelector('input[name="fixedFee"]:checked').value) / 100;
     const otherExpensesRate = parseFloat(document.getElementById('otherExpenses').value) / 100;
     const performanceFeeRate = 0.2; // Performance Fee is 20% on gains over hurdle rate
@@ -217,4 +213,3 @@ function calculateResults() {
 document.addEventListener('DOMContentLoaded', () => {
     updateSliders();
 });
-
