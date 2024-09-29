@@ -122,9 +122,9 @@ function calculateResults() {
                 <th style="width: 100px;">Year</th>
                 <th>Fixed Fee (₹)</th>
                 <th>Other Expenses (₹)</th>
+                <th>High Watermark (₹)</th>
                 <th>Performance Fee (₹)</th>
                 <th>Total Fees (₹)</th>
-                <th>High Watermark (₹)</th>
                 <th>Year End NAV (₹)</th>
             </tr>
     `;
@@ -185,9 +185,9 @@ function calculateResults() {
                 <td>Year ${i}</td>
                 <td>${formatCurrency(fixedFee)}</td>
                 <td>${formatCurrency(otherExpenses)}</td>
+                <td>${formatCurrency(highWatermark)}</td>
                 <td>${formatCurrency(performanceFee)}</td>
                 <td>${formatCurrency(totalFees)}</td>
-                <td>${formatCurrency(highWatermark)}</td>
                 <td>${formatCurrency(yearEndNav)}</td>
             </tr>
         `;
@@ -199,10 +199,10 @@ function calculateResults() {
             <td>Total</td>
             <td>${formatCurrency(totalFixedFees)}</td>
             <td>${formatCurrency(totalOtherExpenses)}</td>
+            <td>-</td>
             <td>${formatCurrency(totalPerformanceFees)}</td>
             <td>-</td>
             <td>-</td>
-            <td>${formatCurrency(yearEndNav)}</td>
         </tr>
     `;
     resultHtml += '</table>';
@@ -215,4 +215,3 @@ function calculateResults() {
 document.addEventListener('DOMContentLoaded', () => {
     updateSliders();
 });
-
